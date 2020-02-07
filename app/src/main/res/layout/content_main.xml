@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context="com.gadarts.neverendingstory.fragments.StoriesListFragment">
+
+    <TextView
+        android:id="@+id/story_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">TEST</TextView>
+
+    <ListView
+        android:id="@+id/stories_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</FrameLayout>
