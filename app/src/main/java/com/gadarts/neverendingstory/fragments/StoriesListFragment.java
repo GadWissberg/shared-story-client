@@ -24,7 +24,7 @@ public class StoriesListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.content_main, container, false);
+        return inflater.inflate(R.layout.content_list, container, false);
     }
 
     @Override

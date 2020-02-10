@@ -1,6 +1,5 @@
 package com.gadarts.neverendingstory.activities;
 
-import android.os.Build;
 import android.os.Bundle;
 
 import com.gadarts.neverendingstory.HttpCallTask;
@@ -14,19 +13,17 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import okhttp3.OkHttpClient;
 
-public class MainActivity extends FragmentActivity {
+public class ListActivity extends FragmentActivity {
 
     private static final String GET_STORIES = "http://192.168.1.136:5000/get_stories";
     private static final String STORIES = "stories";
     private OkHttpClient client;
     private Gson gson = new Gson();
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

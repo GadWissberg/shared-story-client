@@ -1,4 +1,7 @@
 <resources>
-    <string name="app_name">Never Ending Story</string>
+    <string name="app_name">Mututale</string>
     <string name="action_settings">Settings</string>
+    <string name="e_mail">e-mail:</string>
+    <string name="password">password:</string>
+    <string name="submit">submit</string>
 </resources>
