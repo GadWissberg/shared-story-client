@@ -1,2 +1,9 @@
 /build
 /.idea/
+*.lock
+/.gradle/
+/gradle/
+/gradlew
+/gradlew.bat
+/local.properties
+/Never Ending Story.iml
