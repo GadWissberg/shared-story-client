@@ -4,4 +4,6 @@
     <string name="e_mail">e-mail:</string>
     <string name="password">password:</string>
     <string name="submit">submit</string>
+    <string name="feather">Feather</string>
+    <string name="please_login">You\'re not logged in</string>
 </resources>
