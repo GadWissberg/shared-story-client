@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
     android:background="@color/app_background_color"
+    android:orientation="horizontal"
     tools:context="com.gadarts.neverendingstory.fragments.CurrentStoryFragment">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="TEST" />
+        android:text="NEW" />
 </LinearLayout>
