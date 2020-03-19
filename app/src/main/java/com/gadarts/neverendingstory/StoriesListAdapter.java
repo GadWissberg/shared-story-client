@@ -55,7 +55,7 @@ public class StoriesListAdapter extends BaseAdapter {
         textView.setOnClickListener(view -> {
             FragmentTransaction transaction = supportFragmentManager.beginTransaction();
             Fragment currentStoryFragment = new CurrentStoryFragment();
-            transaction.replace(R.id.main_activity, currentStoryFragment);
+            transaction.replace(R.id.activity_main, currentStoryFragment);
             transaction.addToBackStack(null);
             transaction.commit();
         });

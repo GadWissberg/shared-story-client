@@ -1,20 +1,18 @@
 package com.gadarts.neverendingstory.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.gadarts.neverendingstory.R;
-import com.gadarts.neverendingstory.fragments.NewStoryFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentTransaction;
 
 public class ListActivity extends FragmentActivity {
 
     public static final String HOST = "http://192.168.1.136:5000/";
     private static final String GET_STORIES = HOST + "get_stories";
     private static final String STORIES = "stories";
-    public static final String NEW_STORY_FRAGMENT_TAG = "new_story_fragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,10 +20,8 @@ public class ListActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
-            NewStoryFragment fragment = new NewStoryFragment();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.main_activity, fragment, NEW_STORY_FRAGMENT_TAG);
-            transaction.commit();
+            Intent intent = new Intent(this, NewStoryActivity.class);
+            startActivity(intent);
         });
 //        OnRequestResult onSuccess = (String response, Gson gson) -> {
 //            ArrayList<String> storiesNames = gson.fromJson(gson.fromJson(response, JsonObject.class).get(STORIES), ArrayList.class);

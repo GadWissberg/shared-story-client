@@ -23,7 +23,7 @@ public class LoginActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.activity_login);
         Button loginButton = findViewById(R.id.button_login);
         EditText mailInput = findViewById(R.id.mail);
         EditText passwordInput = findViewById(R.id.password);
