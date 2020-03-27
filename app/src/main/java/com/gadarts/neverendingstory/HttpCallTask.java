@@ -2,8 +2,6 @@ package com.gadarts.neverendingstory;
 
 import android.os.AsyncTask;
 
-import com.google.gson.Gson;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -17,7 +15,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class HttpCallTask extends AsyncTask<String, Void, String> {
-    private static final Gson gson = new Gson();
     private static final OkHttpClient client = new OkHttpClient();
     private final RequestTypes type;
     private final OnRequestResult onSuccess;
@@ -50,7 +47,7 @@ public class HttpCallTask extends AsyncTask<String, Void, String> {
         try (Response response = client.newCall(request).execute()) {
             result = Objects.requireNonNull(response.body()).string();
         } catch (IOException e) {
-            onFailure.run(null, gson);
+            onFailure.run(null);
             e.printStackTrace();
         }
         return result;
@@ -71,7 +68,20 @@ public class HttpCallTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String response) {
         super.onPostExecute(response);
-        Optional.ofNullable(response).ifPresent(json -> onSuccess.run(response, gson));
+        Optional<String> optional = Optional.ofNullable(response);
+        if (optional.isPresent()) {
+            try {
+                ServerResponse inflatedResponse = new ServerResponse(response);
+                if (inflatedResponse.isSuccess()) {
+                    onSuccess.run(inflatedResponse);
+                } else {
+                    onFailure.run(inflatedResponse);
+                }
+            } catch (ServerResponse.ResponseInflationFailureException e) {
+                e.printStackTrace();
+                Optional.ofNullable(onFailure).ifPresent(runnable -> runnable.run(null));
+            }
+        } else Optional.ofNullable(onFailure).ifPresent(runnable -> runnable.run(null));
     }
 
 

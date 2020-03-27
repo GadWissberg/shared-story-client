@@ -8,7 +8,7 @@ import android.widget.Toast;
 import com.gadarts.neverendingstory.HttpCallTask;
 import com.gadarts.neverendingstory.OnRequestResult;
 import com.gadarts.neverendingstory.R;
-import com.google.gson.Gson;
+import com.gadarts.neverendingstory.ServerResponse;
 
 import java.util.HashMap;
 
@@ -29,7 +29,7 @@ public class NewStoryActivity extends FragmentActivity {
         EditText titleEditText = findViewById(R.id.new_story_title_input);
         EditText paragraphEditText = findViewById(R.id.new_story_paragraph_input);
         publishButton.setOnClickListener(view -> {
-            OnRequestResult onSuccess = (String response, Gson gson) -> {
+            OnRequestResult onSuccess = (ServerResponse response) -> {
                 finish();
                 Toast.makeText(
                         NewStoryActivity.this,

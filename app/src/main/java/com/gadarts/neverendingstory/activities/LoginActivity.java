@@ -32,14 +32,14 @@ public class LoginActivity extends FragmentActivity {
 
     private void performLogin(EditText mailInput, EditText passwordInput) {
         HttpCallTask task = new HttpCallTask(LOGIN, RequestTypes.POST,
-                (response, gson) -> {
+                (response) -> {
                     Intent intent = new Intent(this, ListActivity.class);
                     startActivity(intent);
                 },
-                (response, gson) -> Toast.makeText(
+                (response) -> LoginActivity.this.runOnUiThread(() -> Toast.makeText(
                         LoginActivity.this,
-                        "Login Failed",
-                        Toast.LENGTH_LONG).show());
+                        response.getMessage(),
+                        Toast.LENGTH_LONG).show()));
         task.setParameters(createLoginParameters(mailInput, passwordInput));
         task.execute();
     }
