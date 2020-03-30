@@ -19,14 +19,14 @@ import androidx.fragment.app.FragmentActivity;
 
 public class LoginActivity extends FragmentActivity {
     private static final String LOGIN = ListActivity.HOST + "login";
-    private static final String KEY_MAIL = "email";
-    private static final String KEY_PASSWORD = "password";
-    public static final String PREFERENCES_LOGIN = "login";
+    public static final String PREFS_LOGIN = "login";
+    static final String KEY_MAIL = "email";
+    static final String KEY_PASSWORD = "password";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFERENCES_LOGIN, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_LOGIN, MODE_PRIVATE);
         String mail = sharedPreferences.getString(KEY_MAIL, null);
         String password = sharedPreferences.getString(KEY_PASSWORD, null);
         if (Optional.ofNullable(mail).isPresent() && Optional.ofNullable(password).isPresent())
@@ -47,7 +47,7 @@ public class LoginActivity extends FragmentActivity {
     private void performLogin(String mailInput, String passwordInput) {
         HttpCallTask task = new HttpCallTask(LOGIN, RequestTypes.POST,
                 (response) -> {
-                    SharedPreferences prefs = getSharedPreferences(PREFERENCES_LOGIN, MODE_PRIVATE);
+                    SharedPreferences prefs = getSharedPreferences(PREFS_LOGIN, MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString(KEY_MAIL, String.valueOf(mailInput));
                     editor.putString(KEY_PASSWORD, String.valueOf(passwordInput));

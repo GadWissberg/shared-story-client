@@ -1,7 +1,9 @@
 package com.gadarts.neverendingstory.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Button;
 
 import com.gadarts.neverendingstory.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -18,6 +20,16 @@ public class ListActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Button logout = findViewById(R.id.button_logout);
+        logout.setOnClickListener(view -> {
+            SharedPreferences prefs = getSharedPreferences(LoginActivity.PREFS_LOGIN, MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(LoginActivity.KEY_MAIL, null);
+            editor.putString(LoginActivity.KEY_PASSWORD, null);
+            editor.apply();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        });
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(this, NewStoryActivity.class);

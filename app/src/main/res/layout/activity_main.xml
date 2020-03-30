@@ -5,6 +5,11 @@
     android:layout_height="match_parent"
     android:background="@color/app_background_color">
 
+    <Button
+        android:id="@+id/button_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/logout" />
 
     <FrameLayout
         android:id="@+id/main"
