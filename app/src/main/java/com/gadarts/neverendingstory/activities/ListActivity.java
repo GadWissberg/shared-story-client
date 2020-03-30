@@ -25,7 +25,7 @@ public class ListActivity extends FragmentActivity {
             SharedPreferences prefs = getSharedPreferences(LoginActivity.PREFS_LOGIN, MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(LoginActivity.KEY_MAIL, null);
-            editor.putString(LoginActivity.KEY_PASSWORD, null);
+            editor.putString(LoginActivity.KEY_PASS, null);
             editor.apply();
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
