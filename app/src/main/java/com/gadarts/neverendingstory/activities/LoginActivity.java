@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.gadarts.neverendingstory.HttpCallTask;
 import com.gadarts.neverendingstory.HttpCallTask.RequestTypes;
 import com.gadarts.neverendingstory.R;
+import com.gadarts.neverendingstory.ServerResponse;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -27,6 +28,7 @@ public class LoginActivity extends FragmentActivity {
     private static final String VALIDATION_MSG_INVALID = "The given e-mail is invalid";
     private static final int PASS_MIN_SIZE = 8;
     private static final String VALIDATION_MSG_PASS_SHORT = "The given password is too short. It has to be atleast 8 characters.";
+    private static final String OPTION_AUTO_LOGIN = "auto_login";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,7 +36,12 @@ public class LoginActivity extends FragmentActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS_LOGIN, MODE_PRIVATE);
         String mail = sharedPreferences.getString(KEY_MAIL, null);
         String password = sharedPreferences.getString(KEY_PASS, null);
-        if (Optional.ofNullable(mail).isPresent() && Optional.ofNullable(password).isPresent())
+        decideAutoLoginOrLoginPage(mail, password);
+    }
+
+    private void decideAutoLoginOrLoginPage(String mail, String password) {
+        boolean opt = getIntent().getBooleanExtra(OPTION_AUTO_LOGIN, true);
+        if (opt && Optional.ofNullable(mail).isPresent() && Optional.ofNullable(password).isPresent())
             performLogin(mail, password);
         else setLoginView();
     }
@@ -69,12 +76,24 @@ public class LoginActivity extends FragmentActivity {
                     Intent intent = new Intent(this, ListActivity.class);
                     startActivity(intent);
                 },
-                (response) -> LoginActivity.this.runOnUiThread(() -> Toast.makeText(
-                        LoginActivity.this,
-                        response.getMessage(),
-                        Toast.LENGTH_LONG).show()));
+                (response) -> {
+                    LoginActivity.this.runOnUiThread(() -> Toast.makeText(
+                            LoginActivity.this,
+                            response.getMessage(),
+                            Toast.LENGTH_LONG).show());
+                    goToLoginIfNoResponseWasFound(response);
+                });
         task.setParameters(createLoginParameters(mailInput, passwordInput));
         task.execute();
+    }
+
+    private void goToLoginIfNoResponseWasFound(ServerResponse response) {
+        if (response.getCode() == 0) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.putExtra(OPTION_AUTO_LOGIN, false);
+            startActivity(intent);
+            finish();
+        }
     }
 
     private String validateLocallyCredentials(String mail, String pass) {

@@ -14,8 +14,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class HttpCallTask extends AsyncTask<String, Void, String> {
+public class HttpCallTask extends AsyncTask<String, Void, RawResponse> {
     private static final OkHttpClient client = new OkHttpClient();
+    private static final String MSG_NO_RESPONSE = "Could not get any response from server";
+    private static ServerResponse noResponse = new ServerResponse(false, MSG_NO_RESPONSE);
     private final RequestTypes type;
     private final OnRequestResult onSuccess;
     private final String url;
@@ -41,13 +43,13 @@ public class HttpCallTask extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected String doInBackground(String... strings) {
+    protected RawResponse doInBackground(String... strings) {
         Request request = createRequest();
-        String result = null;
+        RawResponse result = null;
         try (Response response = client.newCall(request).execute()) {
-            result = Objects.requireNonNull(response.body()).string();
+            result = new RawResponse(Objects.requireNonNull(response.body()).string(), response.code());
         } catch (IOException e) {
-            onFailure.run(null);
+            onFailure.run(noResponse);
             e.printStackTrace();
         }
         return result;
@@ -66,12 +68,13 @@ public class HttpCallTask extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String response) {
+    protected void onPostExecute(RawResponse response) {
         super.onPostExecute(response);
-        Optional<String> optional = Optional.ofNullable(response);
+        Optional<RawResponse> optional = Optional.ofNullable(response);
         if (optional.isPresent()) {
             try {
-                ServerResponse inflatedResponse = new ServerResponse(response);
+                int httpCode = response.getHttpCode();
+                ServerResponse inflatedResponse = new ServerResponse(response.getBody(), httpCode);
                 if (inflatedResponse.isSuccess()) {
                     onSuccess.run(inflatedResponse);
                 } else {
@@ -79,9 +82,9 @@ public class HttpCallTask extends AsyncTask<String, Void, String> {
                 }
             } catch (ServerResponse.ResponseInflationFailureException e) {
                 e.printStackTrace();
-                Optional.ofNullable(onFailure).ifPresent(runnable -> runnable.run(null));
+                Optional.ofNullable(onFailure).ifPresent(runnable -> runnable.run(noResponse));
             }
-        } else Optional.ofNullable(onFailure).ifPresent(runnable -> runnable.run(null));
+        } else Optional.ofNullable(onFailure).ifPresent(runnable -> runnable.run(noResponse));
     }
 
 

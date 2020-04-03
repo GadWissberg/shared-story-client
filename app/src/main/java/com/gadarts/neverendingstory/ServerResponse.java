@@ -13,9 +13,16 @@ public class ServerResponse {
 
     private final boolean success;
     private final String message;
+    private int code;
 
-    ServerResponse(String responseString) throws ResponseInflationFailureException {
+    ServerResponse(boolean success, String message) {
+        this.success = success;
+        this.message = message;
+    }
+
+    ServerResponse(String responseString, int httpCode) throws ResponseInflationFailureException {
         JsonObject map = gson.fromJson(responseString, JsonObject.class);
+        code = httpCode;
         if (map.has(PARAMETER_SUCCESS)) {
             success = map.get(PARAMETER_SUCCESS).getAsInt() == 1;
         } else {
@@ -30,6 +37,10 @@ public class ServerResponse {
 
     public String getMessage() {
         return message;
+    }
+
+    public int getCode() {
+        return code;
     }
 
     static class ResponseInflationFailureException extends Throwable {
