@@ -29,6 +29,7 @@ public class ListActivity extends FragmentActivity {
             editor.apply();
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
+            finish();
         });
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {

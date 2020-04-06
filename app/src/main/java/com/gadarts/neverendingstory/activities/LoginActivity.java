@@ -75,6 +75,7 @@ public class LoginActivity extends FragmentActivity {
                     editor.apply();
                     Intent intent = new Intent(this, ListActivity.class);
                     startActivity(intent);
+                    finish();
                 },
                 (response) -> {
                     LoginActivity.this.runOnUiThread(() -> Toast.makeText(
