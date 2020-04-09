@@ -36,21 +36,13 @@
             android:layout_marginTop="10dp"
             android:text="@string/please_login"
             android:textAlignment="center"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:labelFor="@id/mail"
-                android:maxLines="1"
-                android:text="@string/e_mail" />
 
             <EditText
                 android:id="@+id/mail"
@@ -58,7 +50,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7"
                 android:autofillHints="email"
-                android:inputType="text" />
+                android:backgroundTint="@color/underline_color"
+                android:drawableStart="@drawable/mail"
+                android:drawablePadding="5dp"
+                android:hint="@string/e_mail"
+                android:inputType="text"
+                android:textColorHint="@color/underline_color" />
         </LinearLayout>
 
         <LinearLayout
@@ -66,19 +63,15 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:labelFor="@id/password"
-                android:maxLines="1"
-                android:text="@string/password" />
-
             <EditText
                 android:id="@+id/password"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7"
+                android:backgroundTint="@color/underline_color"
+                android:drawableStart="@drawable/lock"
+                android:hint="@string/password"
+                android:textColorHint="@color/underline_color"
                 android:importantForAutofill="no"
                 android:inputType="textPassword" />
         </LinearLayout>
@@ -92,10 +85,13 @@
 
         <Button
             android:id="@+id/button_login"
-            android:layout_width="wrap_content"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:background="@drawable/button"
             android:padding="10dp"
-            android:text="@string/submit" />
+            android:text="@string/login"
+            android:textColor="@color/button_text_color" />
     </RelativeLayout>
 </LinearLayout>

@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="app_background_color">#DFF8F7</color>
+    <color name="button_color">#ADEACC</color>
+    <color name="button_text_color">#696969</color>
+    <color name="underline_color">#B7CBCA</color>
 </resources>
