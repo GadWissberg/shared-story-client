@@ -48,6 +48,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
+                android:labelFor="@id/mail"
                 android:maxLines="1"
                 android:text="@string/e_mail" />
 
@@ -69,6 +70,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
+                android:labelFor="@id/password"
                 android:maxLines="1"
                 android:text="@string/password" />
 

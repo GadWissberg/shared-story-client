@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 public class StoriesListAdapter extends BaseAdapter {
     public static final String KEY_STORY_ID = "story_id";
+    private static final String ERROR_INVALID_INDEX = "The provided index must be a natural number!";
     private final ArrayList<Story> stories;
     private final androidx.fragment.app.FragmentManager supportFragmentManager;
 
@@ -46,6 +47,7 @@ public class StoriesListAdapter extends BaseAdapter {
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
+        if (position < 0) throw new IndexOutOfBoundsException(ERROR_INVALID_INDEX);
         Optional<View> optional = Optional.ofNullable(convertView);
         return optional.orElseGet(() -> createNewItemView(position, parent));
     }

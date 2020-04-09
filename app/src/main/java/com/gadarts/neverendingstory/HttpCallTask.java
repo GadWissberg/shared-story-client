@@ -18,6 +18,7 @@ public class HttpCallTask extends AsyncTask<String, Void, RawResponse> {
     private static final OkHttpClient client = new OkHttpClient();
     private static final String MSG_NO_RESPONSE = "Could not get any response from server";
     private static ServerResponse noResponse = new ServerResponse(false, MSG_NO_RESPONSE);
+
     private final RequestTypes type;
     private final OnRequestResult onSuccess;
     private final String url;

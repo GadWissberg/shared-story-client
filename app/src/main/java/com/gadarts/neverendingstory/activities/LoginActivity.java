@@ -20,7 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
 public class LoginActivity extends FragmentActivity {
-    public static final String PREFS_LOGIN = "login";
+    static final String PREFS_LOGIN = "login";
     static final String KEY_MAIL = "email";
     static final String KEY_PASS = "password";
     private static final String LOGIN = ListActivity.HOST + "login";
