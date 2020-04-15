@@ -8,16 +8,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.gadarts.neverendingstory.HttpCallTask;
-import com.gadarts.neverendingstory.HttpCallTask.RequestTypes;
+import com.gadarts.neverendingstory.PolyTaleApplication;
 import com.gadarts.neverendingstory.R;
-import com.gadarts.neverendingstory.ServerResponse;
+import com.gadarts.neverendingstory.http.HttpCallTask;
+import com.gadarts.neverendingstory.http.HttpCallTask.RequestType;
+import com.gadarts.neverendingstory.http.RequestOnResults;
+import com.gadarts.neverendingstory.http.ServerResponse;
 
 import java.util.HashMap;
 import java.util.Optional;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
+import okhttp3.OkHttpClient;
 
 public class LoginActivity extends FragmentActivity {
     static final String PREFS_LOGIN = "login";
@@ -66,17 +69,16 @@ public class LoginActivity extends FragmentActivity {
     }
 
     private void executeLoginRequest(String mailInput, String passwordInput) {
-        HttpCallTask task = new HttpCallTask(LOGIN, RequestTypes.POST,
-                (response) -> {
-                    SharedPreferences prefs = getSharedPreferences(PREFS_LOGIN, MODE_PRIVATE);
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString(KEY_MAIL, mailInput);
-                    editor.putString(KEY_PASS, passwordInput);
-                    editor.apply();
-                    Intent intent = new Intent(this, ListActivity.class);
-                    startActivity(intent);
-                    finish();
-                },
+        RequestOnResults onRequestResults = new RequestOnResults((response) -> {
+            SharedPreferences prefs = getSharedPreferences(PREFS_LOGIN, MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(KEY_MAIL, mailInput);
+            editor.putString(KEY_PASS, passwordInput);
+            editor.apply();
+            Intent intent = new Intent(this, ListActivity.class);
+            startActivity(intent);
+            finish();
+        },
                 (response) -> {
                     LoginActivity.this.runOnUiThread(() -> Toast.makeText(
                             LoginActivity.this,
@@ -84,6 +86,8 @@ public class LoginActivity extends FragmentActivity {
                             Toast.LENGTH_LONG).show());
                     goToLoginIfNoResponseWasFound(response);
                 });
+        OkHttpClient client = ((PolyTaleApplication) getApplication()).getClient();
+        HttpCallTask task = new HttpCallTask(client, LOGIN, RequestType.POST, onRequestResults);
         task.setParameters(createLoginParameters(mailInput, passwordInput));
         task.execute();
     }

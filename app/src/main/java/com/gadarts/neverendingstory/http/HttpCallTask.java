@@ -1,4 +1,4 @@
-package com.gadarts.neverendingstory;
+package com.gadarts.neverendingstory.http;
 
 import android.os.AsyncTask;
 
@@ -15,28 +15,36 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class HttpCallTask extends AsyncTask<String, Void, RawResponse> {
-    private static final OkHttpClient client = new OkHttpClient();
     private static final String MSG_NO_RESPONSE = "Could not get any response from server";
     private static ServerResponse noResponse = new ServerResponse(false, MSG_NO_RESPONSE);
 
-    private final RequestTypes type;
+    private final RequestType type;
     private final OnRequestResult onSuccess;
     private final String url;
     private final OnRequestResult onFailure;
+    private final OkHttpClient client;
     private HashMap<String, String> parameters;
 
-    public HttpCallTask(String url, RequestTypes type, OnRequestResult onSuccess) {
-        this(url, type, onSuccess, null);
-    }
-
-    public HttpCallTask(String url,
-                        RequestTypes type,
-                        OnRequestResult onSuccess,
-                        OnRequestResult onFailure) {
+    public HttpCallTask(OkHttpClient client,
+                        String url,
+                        RequestType type,
+                        OnRequestResult onSuccess) {
+        this.client = client;
         this.url = url;
         this.type = type;
         this.onSuccess = onSuccess;
-        this.onFailure = onFailure;
+        this.onFailure = null;
+    }
+
+    public HttpCallTask(OkHttpClient client,
+                        String url,
+                        RequestType type,
+                        RequestOnResults onResults) {
+        this.client = client;
+        this.url = url;
+        this.type = type;
+        this.onSuccess = onResults.getOnSuccess();
+        this.onFailure = onResults.getOnFailure();
     }
 
     public void setParameters(HashMap<String, String> parameters) {
@@ -48,7 +56,8 @@ public class HttpCallTask extends AsyncTask<String, Void, RawResponse> {
         Request request = createRequest();
         RawResponse result = null;
         try (Response response = client.newCall(request).execute()) {
-            result = new RawResponse(Objects.requireNonNull(response.body()).string(), response.code());
+            String body = Objects.requireNonNull(response.body()).string();
+            result = new RawResponse(body, response.code());
         } catch (IOException e) {
             onFailure.run(noResponse);
             e.printStackTrace();
@@ -59,7 +68,7 @@ public class HttpCallTask extends AsyncTask<String, Void, RawResponse> {
     @NotNull
     private Request createRequest() {
         Request request;
-        if (type == RequestTypes.GET) request = new Request.Builder().get().url(url).build();
+        if (type == RequestType.GET) request = new Request.Builder().get().url(url).build();
         else {
             MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             parameters.entrySet().forEach(p -> builder.addFormDataPart(p.getKey(), p.getValue()));
@@ -75,12 +84,10 @@ public class HttpCallTask extends AsyncTask<String, Void, RawResponse> {
         if (optional.isPresent()) {
             try {
                 int httpCode = response.getHttpCode();
-                ServerResponse inflatedResponse = new ServerResponse(response.getBody(), httpCode);
-                if (inflatedResponse.isSuccess()) {
-                    onSuccess.run(inflatedResponse);
-                } else {
-                    onFailure.run(inflatedResponse);
-                }
+                String body = response.getBody();
+                ServerResponse inflatedResponse = new ServerResponse(body, httpCode);
+                if (inflatedResponse.isSuccess()) onSuccess.run(inflatedResponse);
+                else onFailure.run(inflatedResponse);
             } catch (ServerResponse.ResponseInflationFailureException e) {
                 e.printStackTrace();
                 Optional.ofNullable(onFailure).ifPresent(runnable -> runnable.run(noResponse));
@@ -89,5 +96,5 @@ public class HttpCallTask extends AsyncTask<String, Void, RawResponse> {
     }
 
 
-    public enum RequestTypes {GET, POST}
+    public enum RequestType {GET, POST}
 }

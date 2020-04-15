@@ -61,7 +61,7 @@ public class StoriesListAdapter extends BaseAdapter {
             transaction.addToBackStack(null);
             transaction.commit();
         });
-        textView.setText(stories.get(position).getName());
+        textView.setText(stories.get(position).getTitle());
         return textView;
     }
 }

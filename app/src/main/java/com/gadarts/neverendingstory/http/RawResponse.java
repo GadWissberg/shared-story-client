@@ -1,4 +1,4 @@
-package com.gadarts.neverendingstory;
+package com.gadarts.neverendingstory.http;
 
 class RawResponse {
     private final String body;

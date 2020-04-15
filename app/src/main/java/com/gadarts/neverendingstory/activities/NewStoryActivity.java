@@ -5,14 +5,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.gadarts.neverendingstory.HttpCallTask;
-import com.gadarts.neverendingstory.OnRequestResult;
+import com.gadarts.neverendingstory.PolyTaleApplication;
 import com.gadarts.neverendingstory.R;
-import com.gadarts.neverendingstory.ServerResponse;
+import com.gadarts.neverendingstory.http.HttpCallTask;
+import com.gadarts.neverendingstory.http.HttpCallTask.RequestType;
+import com.gadarts.neverendingstory.http.OnRequestResult;
+import com.gadarts.neverendingstory.http.ServerResponse;
 
 import java.util.HashMap;
 
 import androidx.fragment.app.FragmentActivity;
+import okhttp3.OkHttpClient;
 
 public class NewStoryActivity extends FragmentActivity {
 
@@ -36,13 +39,20 @@ public class NewStoryActivity extends FragmentActivity {
                         "Story Created!",
                         Toast.LENGTH_LONG).show();
             };
-            HttpCallTask task = new HttpCallTask(POST_NEW_STORY, HttpCallTask.RequestTypes.POST, onSuccess);
-            HashMap<String, String> parameters = new HashMap<>();
-            parameters.put(PARAMETER_TITLE, String.valueOf(titleEditText.getText()));
-            parameters.put(PARAMETER_PARAGRAPH, String.valueOf(paragraphEditText.getText()));
-            task.setParameters(parameters);
-            task.execute();
+            submitStory(titleEditText, paragraphEditText, onSuccess);
         });
+    }
+
+    private void submitStory(EditText titleEditText,
+                             EditText paragraphEditText,
+                             OnRequestResult onSuccess) {
+        OkHttpClient client = ((PolyTaleApplication) getApplication()).getClient();
+        HttpCallTask task = new HttpCallTask(client, POST_NEW_STORY, RequestType.POST, onSuccess);
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put(PARAMETER_TITLE, String.valueOf(titleEditText.getText()));
+        parameters.put(PARAMETER_PARAGRAPH, String.valueOf(paragraphEditText.getText()));
+        task.setParameters(parameters);
+        task.execute();
     }
 
 
