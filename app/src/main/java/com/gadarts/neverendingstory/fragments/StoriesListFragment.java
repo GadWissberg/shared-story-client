@@ -9,14 +9,17 @@ import android.widget.ListView;
 import com.gadarts.neverendingstory.R;
 import com.gadarts.neverendingstory.StoriesListAdapter;
 
+import org.jetbrains.annotations.NotNull;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 public class StoriesListFragment extends Fragment {
-    private StoriesListAdapter adapter;
+    private final StoriesListAdapter adapter;
 
-    public StoriesListFragment() {
+    public StoriesListFragment(@NonNull StoriesListAdapter storiesListAdapter) {
+        this.adapter = storiesListAdapter;
     }
 
     @Nullable
@@ -28,14 +31,15 @@ public class StoriesListFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ListView list = view.findViewById(R.id.stories_list);
         list.setAdapter(adapter);
     }
 
-    public void setAdapter(StoriesListAdapter adapter) {
-        this.adapter = adapter;
+    public StoriesListAdapter getAdapter() {
+        return adapter;
     }
+
 
 }

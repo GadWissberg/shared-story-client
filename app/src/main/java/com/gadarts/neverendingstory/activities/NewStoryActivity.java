@@ -17,6 +17,7 @@ import java.util.HashMap;
 import androidx.fragment.app.FragmentActivity;
 import okhttp3.OkHttpClient;
 
+
 public class NewStoryActivity extends FragmentActivity {
 
 
@@ -33,6 +34,7 @@ public class NewStoryActivity extends FragmentActivity {
         EditText paragraphEditText = findViewById(R.id.new_story_paragraph_input);
         publishButton.setOnClickListener(view -> {
             OnRequestResult onSuccess = (ServerResponse response) -> {
+                setResult(RESULT_OK);
                 finish();
                 Toast.makeText(
                         NewStoryActivity.this,

@@ -20,7 +20,7 @@ import androidx.fragment.app.FragmentTransaction;
 public class StoriesListAdapter extends BaseAdapter {
     public static final String KEY_STORY_ID = "story_id";
     private static final String ERROR_INVALID_INDEX = "The provided index must be a natural number!";
-    private final ArrayList<Story> stories;
+    private ArrayList<Story> stories;
     private final androidx.fragment.app.FragmentManager supportFragmentManager;
 
     public StoriesListAdapter(ArrayList<Story> stories,
@@ -63,5 +63,13 @@ public class StoriesListAdapter extends BaseAdapter {
         });
         textView.setText(stories.get(position).getTitle());
         return textView;
+    }
+
+    public void clear() {
+        stories.clear();
+    }
+
+    public void setList(ArrayList<Story> stories) {
+        this.stories = stories;
     }
 }
