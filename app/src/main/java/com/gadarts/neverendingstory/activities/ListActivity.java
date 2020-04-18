@@ -1,5 +1,6 @@
 package com.gadarts.neverendingstory.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import com.gadarts.neverendingstory.R;
 import com.gadarts.neverendingstory.StoriesListAdapter;
 import com.gadarts.neverendingstory.bl.Story;
 import com.gadarts.neverendingstory.fragments.StoriesListFragment;
+import com.gadarts.neverendingstory.http.AppRequest;
 import com.gadarts.neverendingstory.http.HttpCallTask;
 import com.gadarts.neverendingstory.http.OnRequestResult;
 import com.gadarts.neverendingstory.http.ServerResponse;
@@ -53,16 +55,16 @@ public class ListActivity extends FragmentActivity {
     }
 
     private void retrieveStories() {
-        OnRequestResult onSuccess = (ServerResponse response) -> {
+        OnRequestResult onSuccess = (ServerResponse response, Context context) -> {
             JsonObject jsonObject = response.getData().get(KEY_STORIES).getAsJsonObject();
             HashMap<String, String> storiesMap = gson.fromJson(jsonObject, HashMap.class);
             inflateStoriesList(storiesMap);
         };
+        AppRequest request = new AppRequest(GET_STORIES, HttpCallTask.RequestType.GET, onSuccess);
         HttpCallTask task = new HttpCallTask(
                 ((PolyTaleApplication) getApplication()).getClient(),
-                GET_STORIES,
-                HttpCallTask.RequestType.GET,
-                onSuccess);
+                request,
+                getApplicationContext());
         task.execute();
     }
 

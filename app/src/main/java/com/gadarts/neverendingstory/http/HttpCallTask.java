@@ -1,5 +1,6 @@
 package com.gadarts.neverendingstory.http;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import org.jetbrains.annotations.NotNull;
@@ -18,37 +19,20 @@ public class HttpCallTask extends AsyncTask<String, Void, RawResponse> {
     private static final String MSG_NO_RESPONSE = "Could not get any response from server";
     private static ServerResponse noResponse = new ServerResponse(false, MSG_NO_RESPONSE);
 
-    private final RequestType type;
-    private final OnRequestResult onSuccess;
-    private final String url;
-    private final OnRequestResult onFailure;
     private final OkHttpClient client;
+    private final AppRequest appRequest;
+    private final Context context;
     private HashMap<String, String> parameters;
 
-    public HttpCallTask(OkHttpClient client,
-                        String url,
-                        RequestType type,
-                        OnRequestResult onSuccess) {
+    public HttpCallTask(OkHttpClient client, AppRequest appRequest, Context context) {
         this.client = client;
-        this.url = url;
-        this.type = type;
-        this.onSuccess = onSuccess;
-        this.onFailure = null;
+        this.appRequest = appRequest;
+        this.context = context;
     }
 
-    public HttpCallTask(OkHttpClient client,
-                        String url,
-                        RequestType type,
-                        RequestOnResults onResults) {
-        this.client = client;
-        this.url = url;
-        this.type = type;
-        this.onSuccess = onResults.getOnSuccess();
-        this.onFailure = onResults.getOnFailure();
-    }
-
-    public void setParameters(HashMap<String, String> parameters) {
+    public HttpCallTask setParameters(HashMap<String, String> parameters) {
         this.parameters = parameters;
+        return this;
     }
 
     @Override
@@ -59,7 +43,7 @@ public class HttpCallTask extends AsyncTask<String, Void, RawResponse> {
             String body = Objects.requireNonNull(response.body()).string();
             result = new RawResponse(body, response.code());
         } catch (IOException e) {
-            onFailure.run(noResponse);
+            appRequest.getOnResults().getOnFailure().run(noResponse, context);
             e.printStackTrace();
         }
         return result;
@@ -67,32 +51,43 @@ public class HttpCallTask extends AsyncTask<String, Void, RawResponse> {
 
     @NotNull
     private Request createRequest() {
-        Request request;
-        if (type == RequestType.GET) request = new Request.Builder().get().url(url).build();
+        Request httpRequest;
+        String url = appRequest.getUrl();
+        if (appRequest.getType() == RequestType.GET)
+            httpRequest = new Request.Builder().get().url(url).build();
         else {
-            MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
-            parameters.entrySet().forEach(p -> builder.addFormDataPart(p.getKey(), p.getValue()));
-            request = new Request.Builder().post(builder.build()).url(url).build();
+            httpRequest = createPostRequest(url);
         }
-        return request;
+        return httpRequest;
+    }
+
+    @NotNull
+    private Request createPostRequest(String url) {
+        Request httpRequest;
+        MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+        parameters.entrySet().forEach(p -> builder.addFormDataPart(p.getKey(), p.getValue()));
+        httpRequest = new Request.Builder().post(builder.build()).url(url).build();
+        return httpRequest;
     }
 
     @Override
     protected void onPostExecute(RawResponse response) {
         super.onPostExecute(response);
         Optional<RawResponse> optional = Optional.ofNullable(response);
+        OnRequestResult onFailure = appRequest.getOnResults().getOnFailure();
         if (optional.isPresent()) {
             try {
                 int httpCode = response.getHttpCode();
                 String body = response.getBody();
                 ServerResponse inflatedResponse = new ServerResponse(body, httpCode);
-                if (inflatedResponse.isSuccess()) onSuccess.run(inflatedResponse);
-                else onFailure.run(inflatedResponse);
+                if (inflatedResponse.isSuccess())
+                    appRequest.getOnResults().getOnSuccess().run(inflatedResponse, context);
+                else onFailure.run(inflatedResponse, context);
             } catch (ServerResponse.ResponseInflationFailureException e) {
                 e.printStackTrace();
-                Optional.ofNullable(onFailure).ifPresent(runnable -> runnable.run(noResponse));
+                onFailure.run(noResponse, context);
             }
-        } else Optional.ofNullable(onFailure).ifPresent(runnable -> runnable.run(noResponse));
+        } else onFailure.run(noResponse, context);
     }
 
 

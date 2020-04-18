@@ -1,5 +1,6 @@
 package com.gadarts.neverendingstory.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -7,6 +8,7 @@ import android.widget.Toast;
 
 import com.gadarts.neverendingstory.PolyTaleApplication;
 import com.gadarts.neverendingstory.R;
+import com.gadarts.neverendingstory.http.AppRequest;
 import com.gadarts.neverendingstory.http.HttpCallTask;
 import com.gadarts.neverendingstory.http.HttpCallTask.RequestType;
 import com.gadarts.neverendingstory.http.OnRequestResult;
@@ -33,7 +35,7 @@ public class NewStoryActivity extends FragmentActivity {
         EditText titleEditText = findViewById(R.id.new_story_title_input);
         EditText paragraphEditText = findViewById(R.id.new_story_paragraph_input);
         publishButton.setOnClickListener(view -> {
-            OnRequestResult onSuccess = (ServerResponse response) -> {
+            OnRequestResult onSuccess = (ServerResponse response, Context context) -> {
                 setResult(RESULT_OK);
                 finish();
                 Toast.makeText(
@@ -49,7 +51,8 @@ public class NewStoryActivity extends FragmentActivity {
                              EditText paragraphEditText,
                              OnRequestResult onSuccess) {
         OkHttpClient client = ((PolyTaleApplication) getApplication()).getClient();
-        HttpCallTask task = new HttpCallTask(client, POST_NEW_STORY, RequestType.POST, onSuccess);
+        AppRequest request = new AppRequest(POST_NEW_STORY, RequestType.POST, onSuccess);
+        HttpCallTask task = new HttpCallTask(client, request, getApplicationContext());
         HashMap<String, String> parameters = new HashMap<>();
         parameters.put(PARAMETER_TITLE, String.valueOf(titleEditText.getText()));
         parameters.put(PARAMETER_PARAGRAPH, String.valueOf(paragraphEditText.getText()));

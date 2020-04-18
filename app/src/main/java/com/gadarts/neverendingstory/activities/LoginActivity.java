@@ -10,9 +10,10 @@ import android.widget.Toast;
 
 import com.gadarts.neverendingstory.PolyTaleApplication;
 import com.gadarts.neverendingstory.R;
+import com.gadarts.neverendingstory.http.AppRequest;
 import com.gadarts.neverendingstory.http.HttpCallTask;
 import com.gadarts.neverendingstory.http.HttpCallTask.RequestType;
-import com.gadarts.neverendingstory.http.RequestOnResults;
+import com.gadarts.neverendingstory.http.OnResults;
 import com.gadarts.neverendingstory.http.ServerResponse;
 
 import java.util.HashMap;
@@ -69,7 +70,7 @@ public class LoginActivity extends FragmentActivity {
     }
 
     private void executeLoginRequest(String mailInput, String passwordInput) {
-        RequestOnResults onRequestResults = new RequestOnResults((response) -> {
+        OnResults onRequestResults = new OnResults((response, context) -> {
             SharedPreferences prefs = getSharedPreferences(PREFS_LOGIN, MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(KEY_MAIL, mailInput);
@@ -79,7 +80,7 @@ public class LoginActivity extends FragmentActivity {
             startActivity(intent);
             finish();
         },
-                (response) -> {
+                (response, context) -> {
                     LoginActivity.this.runOnUiThread(() -> Toast.makeText(
                             LoginActivity.this,
                             response.getMessage(),
@@ -87,9 +88,9 @@ public class LoginActivity extends FragmentActivity {
                     goToLoginIfNoResponseWasFound(response);
                 });
         OkHttpClient client = ((PolyTaleApplication) getApplication()).getClient();
-        HttpCallTask task = new HttpCallTask(client, LOGIN, RequestType.POST, onRequestResults);
-        task.setParameters(createLoginParameters(mailInput, passwordInput));
-        task.execute();
+        AppRequest request = new AppRequest(LOGIN, RequestType.POST, onRequestResults);
+        HttpCallTask task = new HttpCallTask(client, request, getApplicationContext());
+        task.setParameters(createLoginParameters(mailInput, passwordInput)).execute();
     }
 
     private void goToLoginIfNoResponseWasFound(ServerResponse response) {
