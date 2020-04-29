@@ -19,11 +19,13 @@ import java.util.HashMap;
 import androidx.fragment.app.FragmentActivity;
 import okhttp3.OkHttpClient;
 
+import static com.gadarts.neverendingstory.PolyTaleApplication.HOST;
+
 
 public class NewStoryActivity extends FragmentActivity {
 
 
-    private static final String POST_NEW_STORY = ListActivity.HOST + "begin_story";
+    private static final String POST_NEW_STORY = HOST + "story";
     private static final String PARAMETER_TITLE = "title";
     private static final String PARAMETER_PARAGRAPH = "paragraph";
 
@@ -53,10 +55,10 @@ public class NewStoryActivity extends FragmentActivity {
         OkHttpClient client = ((PolyTaleApplication) getApplication()).getClient();
         AppRequest request = new AppRequest(POST_NEW_STORY, RequestType.POST, onSuccess);
         HttpCallTask task = new HttpCallTask(client, request, getApplicationContext());
-        HashMap<String, String> parameters = new HashMap<>();
+        HashMap<String, Object> parameters = new HashMap<>();
         parameters.put(PARAMETER_TITLE, String.valueOf(titleEditText.getText()));
         parameters.put(PARAMETER_PARAGRAPH, String.valueOf(paragraphEditText.getText()));
-        task.setParameters(parameters);
+        request.setParameters(parameters);
         task.execute();
     }
 

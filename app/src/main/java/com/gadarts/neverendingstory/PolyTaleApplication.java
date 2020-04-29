@@ -10,6 +10,7 @@ import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersisto
 import okhttp3.OkHttpClient;
 
 public class PolyTaleApplication extends Application {
+    public static final String HOST = "http://192.168.1.136:5000/";
     private OkHttpClient client = new OkHttpClient();
 
     @Override

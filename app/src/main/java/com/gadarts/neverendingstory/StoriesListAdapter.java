@@ -1,33 +1,25 @@
 package com.gadarts.neverendingstory;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.gadarts.neverendingstory.activities.StoryViewActivity;
 import com.gadarts.neverendingstory.bl.Story;
-import com.gadarts.neverendingstory.fragments.CurrentStoryFragment;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
 import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 public class StoriesListAdapter extends BaseAdapter {
-    public static final String KEY_STORY_ID = "story_id";
     private static final String ERROR_INVALID_INDEX = "The provided index must be a natural number!";
-    private ArrayList<Story> stories;
-    private final androidx.fragment.app.FragmentManager supportFragmentManager;
-
-    public StoriesListAdapter(ArrayList<Story> stories,
-                              FragmentManager supportFragmentManager) {
-        this.stories = stories;
-        this.supportFragmentManager = supportFragmentManager;
-    }
+    public static final String SELECTED_STORY = "selected_story";
+    private ArrayList<Story> stories = new ArrayList<>();
 
     @Override
     public int getCount() {
@@ -53,15 +45,15 @@ public class StoriesListAdapter extends BaseAdapter {
     }
 
     private View createNewItemView(int position, ViewGroup parent) {
-        TextView textView = new TextView(parent.getContext());
+        Activity activity = (Activity) parent.getContext();
+        TextView textView = new TextView(activity);
+        Story story = stories.get(position);
         textView.setOnClickListener(view -> {
-            FragmentTransaction transaction = supportFragmentManager.beginTransaction();
-            Fragment currentStoryFragment = new CurrentStoryFragment();
-            transaction.replace(R.id.activity_main, currentStoryFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
+            Intent intent = new Intent(activity, StoryViewActivity.class);
+            intent.putExtra(SELECTED_STORY, story.getId());
+            activity.startActivity(intent);
         });
-        textView.setText(stories.get(position).getTitle());
+        textView.setText(story.getTitle());
         return textView;
     }
 
@@ -70,6 +62,7 @@ public class StoriesListAdapter extends BaseAdapter {
     }
 
     public void setList(ArrayList<Story> stories) {
-        this.stories = stories;
+        this.stories.clear();
+        this.stories.addAll(stories);
     }
 }

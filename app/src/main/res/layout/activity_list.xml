@@ -11,17 +11,10 @@
         android:layout_height="wrap_content">
 
 
-        <ScrollView
+        <ListView
+            android:id="@+id/stories_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
-
-            <FrameLayout
-                android:id="@+id/main"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" />
-        </ScrollView>
+            android:layout_height="wrap_content" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"

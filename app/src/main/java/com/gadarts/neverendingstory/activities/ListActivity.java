@@ -1,44 +1,43 @@
 package com.gadarts.neverendingstory.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ListView;
 
 import com.gadarts.neverendingstory.PolyTaleApplication;
 import com.gadarts.neverendingstory.R;
 import com.gadarts.neverendingstory.StoriesListAdapter;
 import com.gadarts.neverendingstory.bl.Story;
-import com.gadarts.neverendingstory.fragments.StoriesListFragment;
 import com.gadarts.neverendingstory.http.AppRequest;
 import com.gadarts.neverendingstory.http.HttpCallTask;
 import com.gadarts.neverendingstory.http.OnRequestResult;
 import com.gadarts.neverendingstory.http.ServerResponse;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Optional;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentTransaction;
 
-public class ListActivity extends FragmentActivity {
-    public static final String HOST = "http://192.168.1.136:5000/";
-    public static final String FRAGMENT_NAME_STORIES_LIST = "stories_list";
-    private static final String GET_STORIES = HOST + "get_stories";
-    private static final String KEY_STORIES = "stories";
+import static com.gadarts.neverendingstory.PolyTaleApplication.HOST;
+import static com.gadarts.neverendingstory.activities.StoryViewActivity.KEY_OWNER;
+
+public class ListActivity extends Activity {
+    public static final String KEY_TITLE = "title";
     static final int REQUEST_CODE_NEW_STORY = 0;
-    private Gson gson = new Gson();
+    private static final String GET_STORIES = HOST + "story";
+    private static final String KEY_STORIES = "stories";
+    private static final String KEY_OWNER_ID = "owner_id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_list);
         Button logout = findViewById(R.id.button_logout);
         logout.setOnClickListener(view -> {
             SharedPreferences prefs = getSharedPreferences(LoginActivity.PREFS_LOGIN, MODE_PRIVATE);
@@ -55,10 +54,19 @@ public class ListActivity extends FragmentActivity {
     }
 
     private void retrieveStories() {
+        ListView storiesListView = findViewById(R.id.stories_list);
+        storiesListView.setAdapter(new StoriesListAdapter());
         OnRequestResult onSuccess = (ServerResponse response, Context context) -> {
             JsonObject jsonObject = response.getData().get(KEY_STORIES).getAsJsonObject();
-            HashMap<String, String> storiesMap = gson.fromJson(jsonObject, HashMap.class);
-            inflateStoriesList(storiesMap);
+            ArrayList<Story> stories = new ArrayList<>();
+            jsonObject.entrySet().forEach((storyEntry) -> {
+                JsonObject storyJsonObject = storyEntry.getValue().getAsJsonObject();
+                long id = Long.parseLong(storyEntry.getKey());
+                String title = storyJsonObject.get(KEY_TITLE).getAsString();
+                long owner = storyJsonObject.get(KEY_OWNER).getAsLong();
+                stories.add(new Story(id, title, owner));
+            });
+            inflateStoriesListView(stories);
         };
         AppRequest request = new AppRequest(GET_STORIES, HttpCallTask.RequestType.GET, onSuccess);
         HttpCallTask task = new HttpCallTask(
@@ -86,27 +94,16 @@ public class ListActivity extends FragmentActivity {
     }
 
     private void clearStories() {
-        StoriesListFragment fragment = (StoriesListFragment) getSupportFragmentManager()
-                .findFragmentByTag(FRAGMENT_NAME_STORIES_LIST);
-        Optional.ofNullable(fragment).ifPresent(frag -> frag.getAdapter().clear());
+        ListView listView = findViewById(R.id.stories_list);
+        Optional.ofNullable(listView).ifPresent(view ->
+                ((StoriesListAdapter) view.getAdapter()).clear());
     }
 
-    private void inflateStoriesList(HashMap<String, String> storiesMap) {
-        StoriesListFragment fragment = (StoriesListFragment) getSupportFragmentManager()
-                .findFragmentByTag(FRAGMENT_NAME_STORIES_LIST);
-        ArrayList<Story> stories = new ArrayList<>();
-        storiesMap.forEach((id, title) -> stories.add(new Story(Long.parseLong(id), title)));
-        if (!Optional.ofNullable(fragment).isPresent()) createStoriesList(stories);
-        else fragment.getAdapter().setList(stories);
-    }
-
-    private void createStoriesList(ArrayList<Story> stories) {
-        StoriesListFragment fragment;
-        StoriesListAdapter adapter = new StoriesListAdapter(stories, getSupportFragmentManager());
-        fragment = new StoriesListFragment(adapter);
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.activity_main, fragment, FRAGMENT_NAME_STORIES_LIST);
-        ft.commit();
+    private void inflateStoriesListView(ArrayList<Story> stories) {
+        ListView listView = findViewById(R.id.stories_list);
+        StoriesListAdapter adapter = (StoriesListAdapter) listView.getAdapter();
+        adapter.setList(stories);
+        runOnUiThread(adapter::notifyDataSetChanged);
     }
 
 

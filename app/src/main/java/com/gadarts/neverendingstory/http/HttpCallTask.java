@@ -6,10 +6,12 @@ import android.os.AsyncTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
+import okhttp3.HttpUrl;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -22,17 +24,11 @@ public class HttpCallTask extends AsyncTask<String, Void, RawResponse> {
     private final OkHttpClient client;
     private final AppRequest appRequest;
     private final Context context;
-    private HashMap<String, String> parameters;
 
     public HttpCallTask(OkHttpClient client, AppRequest appRequest, Context context) {
         this.client = client;
         this.appRequest = appRequest;
         this.context = context;
-    }
-
-    public HttpCallTask setParameters(HashMap<String, String> parameters) {
-        this.parameters = parameters;
-        return this;
     }
 
     @Override
@@ -53,9 +49,13 @@ public class HttpCallTask extends AsyncTask<String, Void, RawResponse> {
     private Request createRequest() {
         Request httpRequest;
         String url = appRequest.getUrl();
-        if (appRequest.getType() == RequestType.GET)
-            httpRequest = new Request.Builder().get().url(url).build();
-        else {
+        HttpUrl.Builder httpBuilder;
+        if (appRequest.getType() == RequestType.GET) {
+            httpBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
+            Set<Map.Entry<String, Object>> entries = appRequest.getParameters().entrySet();
+            entries.forEach(p -> httpBuilder.addQueryParameter(p.getKey(), String.valueOf(p.getValue())));
+            httpRequest = new Request.Builder().url(httpBuilder.build()).build();
+        } else {
             httpRequest = createPostRequest(url);
         }
         return httpRequest;
@@ -63,11 +63,12 @@ public class HttpCallTask extends AsyncTask<String, Void, RawResponse> {
 
     @NotNull
     private Request createPostRequest(String url) {
-        Request httpRequest;
+        Request httpRequest = null;
+        Set<Map.Entry<String, Object>> entries = appRequest.getParameters().entrySet();
         MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
-        parameters.entrySet().forEach(p -> builder.addFormDataPart(p.getKey(), p.getValue()));
+        entries.forEach(p -> builder.addFormDataPart(p.getKey(), String.valueOf(p.getValue())));
         httpRequest = new Request.Builder().post(builder.build()).url(url).build();
-        return httpRequest;
+        return Objects.requireNonNull(httpRequest);
     }
 
     @Override

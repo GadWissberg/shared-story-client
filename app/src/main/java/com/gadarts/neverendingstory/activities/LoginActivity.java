@@ -17,17 +17,20 @@ import com.gadarts.neverendingstory.http.OnResults;
 import com.gadarts.neverendingstory.http.ServerResponse;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Optional;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import okhttp3.OkHttpClient;
 
+import static com.gadarts.neverendingstory.PolyTaleApplication.HOST;
+
 public class LoginActivity extends FragmentActivity {
     static final String PREFS_LOGIN = "login";
     static final String KEY_MAIL = "email";
     static final String KEY_PASS = "password";
-    private static final String LOGIN = ListActivity.HOST + "login";
+    private static final String LOGIN = HOST + "login";
     private static final String VALIDATION_MSG_EMPTY = "The field %s cannot be empty.";
     private static final String VALIDATION_MSG_INVALID = "The given e-mail is invalid";
     private static final int PASS_MIN_SIZE = 8;
@@ -41,6 +44,7 @@ public class LoginActivity extends FragmentActivity {
         String mail = sharedPreferences.getString(KEY_MAIL, null);
         String password = sharedPreferences.getString(KEY_PASS, null);
         decideAutoLoginOrLoginPage(mail, password);
+        Locale.getDefault().getDisplayLanguage();
     }
 
     private void decideAutoLoginOrLoginPage(String mail, String password) {
@@ -89,8 +93,9 @@ public class LoginActivity extends FragmentActivity {
                 });
         OkHttpClient client = ((PolyTaleApplication) getApplication()).getClient();
         AppRequest request = new AppRequest(LOGIN, RequestType.POST, onRequestResults);
+        request.setParameters(createLoginParameters(mailInput, passwordInput));
         HttpCallTask task = new HttpCallTask(client, request, getApplicationContext());
-        task.setParameters(createLoginParameters(mailInput, passwordInput)).execute();
+        task.execute();
     }
 
     private void goToLoginIfNoResponseWasFound(ServerResponse response) {
@@ -110,8 +115,8 @@ public class LoginActivity extends FragmentActivity {
         return null;
     }
 
-    private HashMap<String, String> createLoginParameters(String mailInput, String passwordInput) {
-        HashMap<String, String> parameters = new HashMap<>();
+    private HashMap<String, Object> createLoginParameters(String mailInput, String passwordInput) {
+        HashMap<String, Object> parameters = new HashMap<>();
         parameters.put(KEY_MAIL, String.valueOf(mailInput));
         parameters.put(KEY_PASS, String.valueOf(passwordInput));
         return parameters;

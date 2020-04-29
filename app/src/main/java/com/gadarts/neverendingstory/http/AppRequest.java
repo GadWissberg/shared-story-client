@@ -1,5 +1,7 @@
 package com.gadarts.neverendingstory.http;
 
+import java.util.HashMap;
+
 /**
  * Represents a plain request to the server, with URL, type and callbacks on result.
  */
@@ -7,6 +9,7 @@ public class AppRequest {
     private final String url;
     private final HttpCallTask.RequestType type;
     private final OnResults onResults;
+    private HashMap<String, Object> parameters = new HashMap<>();
 
     public AppRequest(String url, HttpCallTask.RequestType type, OnRequestResult onSuccess) {
         this(url, type, new OnResults(onSuccess, null));
@@ -33,5 +36,17 @@ public class AppRequest {
 
     String getUrl() {
         return url;
+    }
+
+    HashMap<String, Object> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(HashMap<String, Object> parameters) {
+        this.parameters = parameters;
+    }
+
+    public void addParameter(String keyRequestId, Object value) {
+        parameters.put(keyRequestId, value);
     }
 }
