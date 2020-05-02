@@ -28,7 +28,7 @@
             android:layout_height="261dp"
             android:layout_gravity="center"
             android:contentDescription="@string/feather"
-            android:src="@drawable/welcome_image" />
+            android:src="@drawable/logo" />
 
         <TextView
             android:layout_width="match_parent"
