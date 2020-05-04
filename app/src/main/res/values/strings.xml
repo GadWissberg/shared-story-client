@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">PolyStory</string>
+    <string name="app_name" translatable="false">ourtale</string>
     <string name="action_settings">Settings</string>
     <string name="e_mail">EMAIL</string>
     <string name="password">PASSWORD</string>
@@ -11,4 +11,5 @@
     <string name="new_story_paragraph_hint">Begin first paragraph here...</string>
     <string name="publish_button_text">Publish</string>
     <string name="logout">LOGOUT</string>
+    <string name="logo">ourtale</string>
 </resources>
