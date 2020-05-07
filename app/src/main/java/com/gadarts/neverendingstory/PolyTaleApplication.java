@@ -7,8 +7,10 @@ import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 
+import lombok.Getter;
 import okhttp3.OkHttpClient;
 
+@Getter
 public class PolyTaleApplication extends Application {
     public static final String HOST = "http://192.168.1.136:5000/";
     private OkHttpClient client = new OkHttpClient();
@@ -21,7 +23,4 @@ public class PolyTaleApplication extends Application {
         client = new OkHttpClient.Builder().cookieJar(cookieJar).build();
     }
 
-    public OkHttpClient getClient() {
-        return client;
-    }
 }

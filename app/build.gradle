@@ -45,4 +45,6 @@ dependencies {
     implementation group: 'org.mockito', name: 'mockito-core', version: '2.25.0'
     implementation 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
     implementation 'org.conscrypt:conscrypt-android:2.2.1'
+    implementation "org.projectlombok:lombok:1.18.12"
+    annotationProcessor "org.projectlombok:lombok:1.18.12"
 }

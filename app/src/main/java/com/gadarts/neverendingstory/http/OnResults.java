@@ -4,6 +4,9 @@ import android.widget.Toast;
 
 import java.util.Optional;
 
+import lombok.Getter;
+
+@Getter
 public class OnResults {
     private static final OnRequestResult defaultOnFailure = (response, c) -> Toast.makeText(
             c,
@@ -21,11 +24,4 @@ public class OnResults {
         }
     }
 
-    public OnRequestResult getOnSuccess() {
-        return onSuccess;
-    }
-
-    public OnRequestResult getOnFailure() {
-        return onFailure;
-    }
 }

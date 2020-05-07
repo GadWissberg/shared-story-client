@@ -1,5 +1,8 @@
 package com.gadarts.neverendingstory.http;
 
+import lombok.Getter;
+
+@Getter
 class RawResponse {
     private final String body;
     private final int httpCode;
@@ -9,11 +12,4 @@ class RawResponse {
         this.httpCode = httpCode;
     }
 
-    public int getHttpCode() {
-        return httpCode;
-    }
-
-    public String getBody() {
-        return body;
-    }
 }

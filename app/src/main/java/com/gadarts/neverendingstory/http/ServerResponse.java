@@ -3,6 +3,9 @@ package com.gadarts.neverendingstory.http;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import lombok.Getter;
+
+@Getter
 public class ServerResponse {
     private final static Gson gson = new Gson();
     private static final String PAR_SUCCESS = "success";
@@ -32,22 +35,6 @@ public class ServerResponse {
         if (map.has(PAR_SUCCESS)) success = map.get(PAR_SUCCESS).getAsBoolean();
         else
             throw new ResponseInflationFailureException(String.format(MSG_PAR_MISSING, PAR_SUCCESS));
-    }
-
-    public JsonObject getData() {
-        return data;
-    }
-
-    boolean isSuccess() {
-        return success;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public int getCode() {
-        return code;
     }
 
     static class ResponseInflationFailureException extends Throwable {

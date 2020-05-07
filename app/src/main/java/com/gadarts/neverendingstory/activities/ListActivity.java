@@ -32,7 +32,6 @@ public class ListActivity extends Activity {
     static final int REQUEST_CODE_NEW_STORY = 0;
     private static final String GET_STORIES = HOST + "story";
     private static final String KEY_STORIES = "stories";
-    private static final String KEY_OWNER_ID = "owner_id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

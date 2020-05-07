@@ -2,9 +2,12 @@ package com.gadarts.neverendingstory.http;
 
 import java.util.HashMap;
 
+import lombok.Getter;
+
 /**
  * Represents a plain request to the server, with URL, type and callbacks on result.
  */
+@Getter
 public class AppRequest {
     private final String url;
     private final HttpCallTask.RequestType type;
@@ -24,22 +27,6 @@ public class AppRequest {
         this.url = url;
         this.type = type;
         this.onResults = onResults;
-    }
-
-    OnResults getOnResults() {
-        return onResults;
-    }
-
-    HttpCallTask.RequestType getType() {
-        return type;
-    }
-
-    String getUrl() {
-        return url;
-    }
-
-    HashMap<String, Object> getParameters() {
-        return parameters;
     }
 
     public void setParameters(HashMap<String, Object> parameters) {
