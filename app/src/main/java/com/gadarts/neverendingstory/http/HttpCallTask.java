@@ -39,7 +39,6 @@ public class HttpCallTask extends AsyncTask<String, Void, RawResponse> {
             String body = Objects.requireNonNull(response.body()).string();
             result = new RawResponse(body, response.code());
         } catch (IOException e) {
-            appRequest.getOnResults().getOnFailure().run(noResponse, context);
             e.printStackTrace();
         }
         return result;

@@ -45,7 +45,7 @@
                 android:drawableStart="@drawable/mail"
                 android:drawablePadding="5dp"
                 android:hint="@string/e_mail"
-                android:inputType="text"
+                android:inputType="textEmailAddress"
                 android:textColorHint="@color/underline_color" />
         </LinearLayout>
 
@@ -64,6 +64,8 @@
                 android:hint="@string/password"
                 android:importantForAutofill="no"
                 android:inputType="textPassword"
+                android:imeOptions=""
+                android:nextFocusForward="@id/button_login"
                 android:textColorHint="@color/underline_color" />
         </LinearLayout>
     </LinearLayout>

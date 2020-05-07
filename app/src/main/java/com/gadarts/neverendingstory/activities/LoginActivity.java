@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -15,6 +16,8 @@ import com.gadarts.neverendingstory.http.HttpCallTask;
 import com.gadarts.neverendingstory.http.HttpCallTask.RequestType;
 import com.gadarts.neverendingstory.http.OnResults;
 import com.gadarts.neverendingstory.http.ServerResponse;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -56,12 +59,24 @@ public class LoginActivity extends FragmentActivity {
 
     private void setLoginView() {
         setContentView(R.layout.activity_login);
-        Button loginButton = findViewById(R.id.button_login);
         EditText mailInput = findViewById(R.id.mail);
         EditText passwordInput = findViewById(R.id.password);
+        Button loginButton = initializeLoginButton(mailInput, passwordInput);
+        passwordInput.setOnEditorActionListener((v, actionId, event) -> {
+            if ((actionId == EditorInfo.IME_ACTION_DONE)) {
+                loginButton.callOnClick();
+            }
+            return false;
+        });
+    }
+
+    @NotNull
+    private Button initializeLoginButton(EditText mailInput, EditText passwordInput) {
+        Button loginButton = findViewById(R.id.button_login);
         loginButton.setOnClickListener(button -> performLogin(
                 String.valueOf(mailInput.getText()),
                 String.valueOf(passwordInput.getText())));
+        return loginButton;
     }
 
     private void performLogin(String mailInput, String passwordInput) {
