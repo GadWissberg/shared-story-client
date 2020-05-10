@@ -19,7 +19,7 @@ import okhttp3.Response;
 
 public class HttpCallTask extends AsyncTask<String, Void, RawResponse> {
     private static final String MSG_NO_RESPONSE = "Could not get any response from server";
-    private static ServerResponse noResponse = new ServerResponse(false, MSG_NO_RESPONSE);
+    private static final ServerResponse noResponse = new ServerResponse(false, MSG_NO_RESPONSE);
 
     private final OkHttpClient client;
     private final AppRequest appRequest;
@@ -62,7 +62,7 @@ public class HttpCallTask extends AsyncTask<String, Void, RawResponse> {
 
     @NotNull
     private Request createPostRequest(String url) {
-        Request httpRequest = null;
+        Request httpRequest;
         Set<Map.Entry<String, Object>> entries = appRequest.getParameters().entrySet();
         MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
         entries.forEach(p -> builder.addFormDataPart(p.getKey(), String.valueOf(p.getValue())));

@@ -29,7 +29,7 @@ import static com.gadarts.neverendingstory.activities.StoryViewActivity.KEY_OWNE
 
 public class ListActivity extends Activity {
     public static final String KEY_TITLE = "title";
-    static final int REQUEST_CODE_NEW_STORY = 0;
+    private static final int REQUEST_CODE_NEW_STORY = 0;
     private static final String GET_STORIES = HOST + "story";
     private static final String KEY_STORIES = "stories";
 
@@ -53,8 +53,7 @@ public class ListActivity extends Activity {
     }
 
     private void retrieveStories() {
-        ListView storiesListView = findViewById(R.id.stories_list);
-        storiesListView.setAdapter(new StoriesListAdapter());
+        ((ListView) findViewById(R.id.stories_list)).setAdapter(new StoriesListAdapter());
         OnRequestResult onSuccess = (ServerResponse response, Context context) -> {
             JsonObject jsonObject = response.getData().get(KEY_STORIES).getAsJsonObject();
             ArrayList<Story> stories = new ArrayList<>();
@@ -68,11 +67,10 @@ public class ListActivity extends Activity {
             inflateStoriesListView(stories);
         };
         AppRequest request = new AppRequest(GET_STORIES, HttpCallTask.RequestType.GET, onSuccess);
-        HttpCallTask task = new HttpCallTask(
+        new HttpCallTask(
                 ((PolyTaleApplication) getApplication()).getClient(),
                 request,
-                getApplicationContext());
-        task.execute();
+                getApplicationContext()).execute();
     }
 
     private void addFloatingButton() {

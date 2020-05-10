@@ -19,7 +19,7 @@ import androidx.annotation.RequiresApi;
 public class StoriesListAdapter extends BaseAdapter {
     private static final String ERROR_INVALID_INDEX = "The provided index must be a natural number!";
     public static final String SELECTED_STORY = "selected_story";
-    private ArrayList<Story> stories = new ArrayList<>();
+    private final ArrayList<Story> stories = new ArrayList<>();
 
     @Override
     public int getCount() {
