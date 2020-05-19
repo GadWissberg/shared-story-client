@@ -8,8 +8,10 @@
     <string name="please_login">Sign in</string>
     <string name="new_story_header">Begin a New Story</string>
     <string name="new_story_title_input_label">Title:</string>
-    <string name="new_story_paragraph_hint">Begin first paragraph here...</string>
+    <string name="hint_new_story_paragraph">Begin first paragraph here...</string>
     <string name="publish_button_text">Publish</string>
     <string name="logout">LOGOUT</string>
     <string name="logo">ourtale</string>
+    <string name="suggest">Continue This...</string>
+    <string name="submit_suggestion">Submit Suggestion</string>
 </resources>

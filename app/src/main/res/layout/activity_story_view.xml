@@ -32,4 +32,25 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/button_suggest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/suggest" />
+
+    <EditText
+        android:id="@+id/edit_text_paragraph_suggestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_new_story_paragraph"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/button_submit_suggestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/submit_suggestion"
+        android:visibility="gone" />
 </LinearLayout>

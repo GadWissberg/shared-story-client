@@ -49,7 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="start"
-            android:hint="@string/new_story_paragraph_hint"
+            android:hint="@string/hint_new_story_paragraph"
             android:importantForAutofill="no"
             android:inputType="textMultiLine"
             android:lines="6"

@@ -9,7 +9,9 @@
     <string name="please_login">התחבר</string>
     <string name="new_story_header">התחל סיפור חדש</string>
     <string name="new_story_title_input_label">כותרת:</string>
-    <string name="new_story_paragraph_hint">פסקה ראשונה מתחילה כאן...</string>
+    <string name="hint_new_story_paragraph">פסקה ראשונה מתחילה כאן…</string>
     <string name="publish_button_text">פרסם</string>
     <string name="logout">התנתק</string>
+    <string name="suggest">המשך את הסיפור…</string>
+    <string name="submit_suggestion">שלח הצעה</string>
 </resources>
