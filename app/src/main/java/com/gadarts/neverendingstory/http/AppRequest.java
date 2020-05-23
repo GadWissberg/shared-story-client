@@ -35,10 +35,10 @@ public class AppRequest {
     /**
      * Add a new parameter. Overrides existing parameter with same key.
      *
-     * @param keyRequestId
+     * @param key
      * @param value
      */
-    public void addParameter(String keyRequestId, Object value) {
-        parameters.put(keyRequestId, value);
+    public void addParameter(String key, Object value) {
+        parameters.put(key, value);
     }
 }
