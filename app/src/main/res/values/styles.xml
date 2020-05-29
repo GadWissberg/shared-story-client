@@ -9,6 +9,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Theme.Translucency" parent="android:style/Theme.Translucent">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="android:windowBackground">@null</item>
         <item name="windowActionBar">false</item>
