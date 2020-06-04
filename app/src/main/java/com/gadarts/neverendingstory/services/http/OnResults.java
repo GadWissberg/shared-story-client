@@ -1,4 +1,4 @@
-package com.gadarts.neverendingstory.http;
+package com.gadarts.neverendingstory.services.http;
 
 import android.widget.Toast;
 

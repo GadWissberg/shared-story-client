@@ -11,11 +11,13 @@ import android.widget.ListView;
 import com.gadarts.neverendingstory.PolyTaleApplication;
 import com.gadarts.neverendingstory.R;
 import com.gadarts.neverendingstory.StoriesListAdapter;
-import com.gadarts.neverendingstory.bl.Story;
-import com.gadarts.neverendingstory.http.AppRequest;
-import com.gadarts.neverendingstory.http.HttpCallTask;
-import com.gadarts.neverendingstory.http.OnRequestResult;
-import com.gadarts.neverendingstory.http.ServerResponse;
+import com.gadarts.neverendingstory.models.Story;
+import com.gadarts.neverendingstory.models.User;
+import com.gadarts.neverendingstory.services.DataInflater;
+import com.gadarts.neverendingstory.services.http.AppRequest;
+import com.gadarts.neverendingstory.services.http.HttpCallTask;
+import com.gadarts.neverendingstory.services.http.OnRequestResult;
+import com.gadarts.neverendingstory.services.http.ServerResponse;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.JsonObject;
 
@@ -25,10 +27,10 @@ import java.util.Optional;
 import androidx.annotation.Nullable;
 
 import static com.gadarts.neverendingstory.PolyTaleApplication.HOST;
-import static com.gadarts.neverendingstory.activities.StoryViewActivity.KEY_OWNER;
+import static com.gadarts.neverendingstory.services.DataInflater.KEY_OWNER;
+import static com.gadarts.neverendingstory.services.DataInflater.KEY_TITLE;
 
 public class ListActivity extends Activity {
-    public static final String KEY_TITLE = "title";
     private static final int REQUEST_CODE_NEW_STORY = 0;
     private static final String GET_STORIES = HOST + "story";
     private static final String KEY_STORIES = "stories";
@@ -61,7 +63,8 @@ public class ListActivity extends Activity {
                 JsonObject storyJsonObject = storyEntry.getValue().getAsJsonObject();
                 long id = Long.parseLong(storyEntry.getKey());
                 String title = storyJsonObject.get(KEY_TITLE).getAsString();
-                long owner = storyJsonObject.get(KEY_OWNER).getAsLong();
+                DataInflater dataInflater = ((PolyTaleApplication) getApplication()).getDataInflater();
+                User owner = dataInflater.inflateUser(storyJsonObject.get(KEY_OWNER).getAsLong());
                 stories.add(new Story(id, title, owner));
             });
             inflateStoriesListView(stories);

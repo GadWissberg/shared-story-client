@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.gadarts.neverendingstory.activities.StoryViewActivity;
-import com.gadarts.neverendingstory.bl.Story;
+import com.gadarts.neverendingstory.models.Story;
 
 import java.util.ArrayList;
 import java.util.Optional;

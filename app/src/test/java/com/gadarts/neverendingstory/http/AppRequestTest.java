@@ -1,5 +1,9 @@
 package com.gadarts.neverendingstory.http;
 
+import com.gadarts.neverendingstory.services.http.AppRequest;
+import com.gadarts.neverendingstory.services.http.HttpCallTask;
+import com.gadarts.neverendingstory.services.http.OnRequestResult;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

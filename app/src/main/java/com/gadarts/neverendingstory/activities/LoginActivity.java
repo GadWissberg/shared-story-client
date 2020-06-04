@@ -11,11 +11,11 @@ import android.widget.Toast;
 
 import com.gadarts.neverendingstory.PolyTaleApplication;
 import com.gadarts.neverendingstory.R;
-import com.gadarts.neverendingstory.http.AppRequest;
-import com.gadarts.neverendingstory.http.HttpCallTask;
-import com.gadarts.neverendingstory.http.HttpCallTask.RequestType;
-import com.gadarts.neverendingstory.http.OnResults;
-import com.gadarts.neverendingstory.http.ServerResponse;
+import com.gadarts.neverendingstory.services.http.AppRequest;
+import com.gadarts.neverendingstory.services.http.HttpCallTask;
+import com.gadarts.neverendingstory.services.http.HttpCallTask.RequestType;
+import com.gadarts.neverendingstory.services.http.OnResults;
+import com.gadarts.neverendingstory.services.http.ServerResponse;
 
 import org.jetbrains.annotations.NotNull;
 

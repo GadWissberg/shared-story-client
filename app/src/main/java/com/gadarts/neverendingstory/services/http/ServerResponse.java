@@ -1,4 +1,4 @@
-package com.gadarts.neverendingstory.http;
+package com.gadarts.neverendingstory.services.http;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -26,8 +26,7 @@ public class ServerResponse {
         this.data = null;
     }
 
-    ServerResponse(String responseString,
-                   int httpCode) throws ResponseInflationFailureException {
+    ServerResponse(String responseString, int httpCode) throws ResponseInflationFailureException {
         JsonObject map = gson.fromJson(responseString, JsonObject.class);
         this.code = httpCode;
         this.message = map.has(PAR_MESSAGE) ? map.get(PAR_MESSAGE).getAsString() : null;

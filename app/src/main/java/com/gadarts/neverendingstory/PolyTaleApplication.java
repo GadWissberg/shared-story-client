@@ -6,6 +6,7 @@ import com.franmontiel.persistentcookiejar.ClearableCookieJar;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+import com.gadarts.neverendingstory.services.DataInflater;
 
 import lombok.Getter;
 import okhttp3.OkHttpClient;
@@ -14,6 +15,7 @@ import okhttp3.OkHttpClient;
 public class PolyTaleApplication extends Application {
     public static final String HOST = "http://192.168.1.136:5000/";
     private OkHttpClient client = new OkHttpClient();
+    private DataInflater dataInflater = new DataInflater();
 
     @Override
     public void onCreate() {
