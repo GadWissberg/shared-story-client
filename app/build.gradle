@@ -1,11 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.gadarts.neverendingstory"
         minSdkVersion 24
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -43,6 +47,7 @@ dependencies {
     testImplementation "junit:junit:4.12"
     androidTestImplementation "org.mockito:mockito-android:2.25.0"
     implementation group: 'org.mockito', name: 'mockito-core', version: '2.25.0'
+    testImplementation 'org.mockito:mockito-inline:2.13.0'
     implementation 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
     implementation 'org.conscrypt:conscrypt-android:2.2.1'
     implementation "org.projectlombok:lombok:1.18.12"

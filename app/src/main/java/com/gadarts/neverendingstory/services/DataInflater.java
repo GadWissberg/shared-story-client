@@ -24,17 +24,18 @@ public class DataInflater {
     private static final String KEY_OWNER_ID = "owner_id";
     private static final String KEY_CONTENT = "content";
 
-    private Map<Long, Story> cachedStories = new HashMap<>();
-    private Map<Long, User> cachedUsers = new HashMap<>();
-    private Map<Long, Paragraph> cachedParagraphs = new HashMap<>();
+    private final Map<Long, Story> cachedStories = new HashMap<>();
+    private final Map<Long, User> cachedUsers = new HashMap<>();
+    private final Map<Long, Paragraph> cachedParagraphs = new HashMap<>();
 
-    public Story inflateStory(long storyId, JsonObject jsonObject) {
+    public Story inflateStory(long storyId, @NotNull JsonObject jsonObject) {
         if (cachedStories.containsKey(storyId)) return cachedStories.get(storyId);
         JsonObject ownerJsonObject = jsonObject.get(KEY_OWNER).getAsJsonObject();
         String userName = ownerJsonObject.get(KEY_OWNER_NAME).getAsString();
         User user = inflateUser(ownerJsonObject.get(KEY_ID).getAsLong(), userName);
         Story story = new Story(storyId, jsonObject.get(KEY_TITLE).getAsString(), user);
         inflateAllParagraphs(jsonObject, story);
+        cachedStories.put(storyId, story);
         return story;
     }
 

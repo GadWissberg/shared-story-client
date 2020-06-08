@@ -24,7 +24,7 @@ public class SplashActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         setFadeAnimation();
-        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+        if (android.os.Build.VERSION.SDK_INT != Build.VERSION_CODES.O) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
         changeToNextActivityWithDelay();
