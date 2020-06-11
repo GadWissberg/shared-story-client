@@ -14,4 +14,10 @@
     <string name="logout">התנתק</string>
     <string name="suggest">המשך את הסיפור…</string>
     <string name="submit_suggestion">שלח הצעה</string>
+    <string name="sign_up">הצטרף:</string>
+    <string name="repeat_password">חזור על הסיסמא</string>
+    <string name="user_name">שם משתמש</string>
+    <string name="signup_button">הרשם</string>
+    <string name="join_now">לא רשום? הצטרף כעת!</string>
+    <string name="login_instead">רשום כבר? התחבר</string>
 </resources>

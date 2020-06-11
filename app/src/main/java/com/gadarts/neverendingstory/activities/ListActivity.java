@@ -64,7 +64,8 @@ public class ListActivity extends Activity {
                 long id = Long.parseLong(storyEntry.getKey());
                 String title = storyJsonObject.get(KEY_TITLE).getAsString();
                 DataInflater dataInflater = ((PolyTaleApplication) getApplication()).getDataInflater();
-                User owner = dataInflater.inflateUser(storyJsonObject.get(KEY_OWNER).getAsLong());
+                JsonObject ownerJsonObject = storyJsonObject.get(KEY_OWNER).getAsJsonObject();
+                User owner = dataInflater.inflateUser(ownerJsonObject);
                 stories.add(new Story(id, title, owner));
             });
             inflateStoriesListView(stories);

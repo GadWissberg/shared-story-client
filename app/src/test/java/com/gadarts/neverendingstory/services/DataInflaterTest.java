@@ -13,8 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static com.gadarts.neverendingstory.services.DataInflater.KEY_ID;
+import static com.gadarts.neverendingstory.services.DataInflater.KEY_NAME;
 import static com.gadarts.neverendingstory.services.DataInflater.KEY_OWNER;
-import static com.gadarts.neverendingstory.services.DataInflater.KEY_OWNER_NAME;
 import static com.gadarts.neverendingstory.services.DataInflater.KEY_PARAGRAPHS;
 import static com.gadarts.neverendingstory.services.DataInflater.KEY_PARAGRAPHS_SUGGESTIONS;
 import static com.gadarts.neverendingstory.services.DataInflater.KEY_TITLE;
@@ -51,7 +51,7 @@ public class DataInflaterTest {
         when(storyJsonObject.get(KEY_PARAGRAPHS)).thenReturn(new JsonArray());
         when(storyJsonObject.get(KEY_PARAGRAPHS_SUGGESTIONS)).thenReturn(new JsonArray());
         when(storyJsonObject.get(KEY_TITLE)).thenReturn(new JsonPrimitive(STORY_TITLE));
-        when(ownerJsonObject.get(KEY_OWNER_NAME)).thenReturn(new JsonPrimitive(OWNER_NAME));
+        when(ownerJsonObject.get(KEY_NAME)).thenReturn(new JsonPrimitive(OWNER_NAME));
         when(ownerJsonObject.get(KEY_ID)).thenReturn(new JsonPrimitive(OWNER_ID));
         dataInflater.inflateUser(OWNER_ID);
 

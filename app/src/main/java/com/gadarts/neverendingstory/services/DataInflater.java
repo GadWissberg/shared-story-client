@@ -16,7 +16,7 @@ import java.util.Map;
 public class DataInflater {
     public static final String KEY_TITLE = "title";
     public static final String KEY_OWNER = "owner";
-    public static final String KEY_OWNER_NAME = "name";
+    public static final String KEY_NAME = "name";
     public static final String KEY_ID = "id";
     public static final String KEY_PARAGRAPHS = "paragraphs";
     public static final String KEY_PARAGRAPHS_SUGGESTIONS = "suggestions";
@@ -31,8 +31,7 @@ public class DataInflater {
     public Story inflateStory(long storyId, @NotNull JsonObject jsonObject) {
         if (cachedStories.containsKey(storyId)) return cachedStories.get(storyId);
         JsonObject ownerJsonObject = jsonObject.get(KEY_OWNER).getAsJsonObject();
-        String userName = ownerJsonObject.get(KEY_OWNER_NAME).getAsString();
-        User user = inflateUser(ownerJsonObject.get(KEY_ID).getAsLong(), userName);
+        User user = inflateUser(ownerJsonObject);
         Story story = new Story(storyId, jsonObject.get(KEY_TITLE).getAsString(), user);
         inflateAllParagraphs(jsonObject, story);
         cachedStories.put(storyId, story);
@@ -68,16 +67,13 @@ public class DataInflater {
         return paragraph;
     }
 
-    public User inflateUser(long userId) {
-        return inflateUser(userId, null);
-    }
-
-    public User inflateUser(long userId, String userName) {
+    public User inflateUser(JsonObject ownerJsonObject) {
         User user;
+        long userId = ownerJsonObject.get(KEY_ID).getAsLong();
         if (cachedUsers.containsKey(userId)) {
             user = cachedUsers.get(userId);
         } else {
-            user = new User(userId, userName);
+            user = new User(userId, ownerJsonObject.get(KEY_NAME).getAsString());
         }
         return user;
     }

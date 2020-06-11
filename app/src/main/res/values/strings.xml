@@ -8,10 +8,17 @@
     <string name="please_login">Sign in</string>
     <string name="new_story_header">Begin a New Story</string>
     <string name="new_story_title_input_label">Title:</string>
-    <string name="hint_new_story_paragraph">Begin first paragraph here...</string>
+    <string name="hint_new_story_paragraph">Begin first paragraph here…</string>
     <string name="publish_button_text">Publish</string>
     <string name="logout">LOGOUT</string>
-    <string name="logo">ourtale</string>
-    <string name="suggest">Continue This...</string>
+    <string name="logo" translatable="false">ourtale</string>
+    <string name="suggest">Continue This…</string>
     <string name="submit_suggestion">Submit Suggestion</string>
+    <string name="sign_up">Sign-up:</string>
+    <string name="repeat_password">REPEAT PASSWORD</string>
+    <string name="user_name">USER-NAME</string>
+    <string name="signup_button">Sign Up</string>
+    <string name="join_now">Not signed-up? Join now!</string>
+    <string name="login_instead">Already signed-up? Login instead</string>
+    <string name="version_name">0.0.1</string>
 </resources>

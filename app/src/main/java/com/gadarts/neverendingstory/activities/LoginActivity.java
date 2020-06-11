@@ -1,5 +1,6 @@
 package com.gadarts.neverendingstory.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.util.Patterns;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gadarts.neverendingstory.PolyTaleApplication;
@@ -20,7 +22,6 @@ import com.gadarts.neverendingstory.services.http.ServerResponse;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Optional;
 
 import androidx.annotation.Nullable;
@@ -47,20 +48,23 @@ public class LoginActivity extends FragmentActivity {
         String mail = sharedPreferences.getString(KEY_MAIL, null);
         String password = sharedPreferences.getString(KEY_PASS, null);
         decideAutoLoginOrLoginPage(mail, password);
-        Locale.getDefault().getDisplayLanguage();
     }
 
     private void decideAutoLoginOrLoginPage(String mail, String password) {
         boolean opt = getIntent().getBooleanExtra(OPTION_AUTO_LOGIN, true);
-        if (opt && Optional.ofNullable(mail).isPresent() && Optional.ofNullable(password).isPresent())
+        if (opt && Optional.ofNullable(mail).isPresent() && Optional.ofNullable(password).isPresent()) {
             performLogin(mail, password);
-        else setLoginView();
+        } else {
+            setLoginView();
+        }
     }
 
     private void setLoginView() {
         setContentView(R.layout.activity_login);
-        EditText mailInput = findViewById(R.id.mail);
-        EditText passwordInput = findViewById(R.id.password);
+        TextView link = findViewById(R.id.link_join_now);
+        link.setOnClickListener(view -> goToActivityAndFinish(SignUpActivity.class));
+        EditText mailInput = findViewById(R.id.input_mail);
+        EditText passwordInput = findViewById(R.id.input_password);
         Button loginButton = initializeLoginButton(mailInput, passwordInput);
         passwordInput.setOnEditorActionListener((v, actionId, event) -> {
             if ((actionId == EditorInfo.IME_ACTION_DONE)) {
@@ -69,6 +73,7 @@ public class LoginActivity extends FragmentActivity {
             return false;
         });
     }
+
 
     @NotNull
     private Button initializeLoginButton(EditText mailInput, EditText passwordInput) {
@@ -95,9 +100,7 @@ public class LoginActivity extends FragmentActivity {
             editor.putString(KEY_MAIL, mailInput);
             editor.putString(KEY_PASS, passwordInput);
             editor.apply();
-            Intent intent = new Intent(this, ListActivity.class);
-            startActivity(intent);
-            finish();
+            goToActivityAndFinish(ListActivity.class);
         },
                 (response, context) -> {
                     LoginActivity.this.runOnUiThread(() -> Toast.makeText(
@@ -111,6 +114,12 @@ public class LoginActivity extends FragmentActivity {
         request.setParameters(createLoginParameters(mailInput, passwordInput));
         HttpCallTask task = new HttpCallTask(client, request, getApplicationContext());
         task.execute();
+    }
+
+    private void goToActivityAndFinish(Class<? extends Activity> activity) {
+        Intent intent = new Intent(this, activity);
+        startActivity(intent);
+        finish();
     }
 
     private void goToLoginIfNoResponseWasFound(ServerResponse response) {

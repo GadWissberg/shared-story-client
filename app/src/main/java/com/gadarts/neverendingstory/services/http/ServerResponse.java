@@ -31,9 +31,11 @@ public class ServerResponse {
         this.code = httpCode;
         this.message = map.has(PAR_MESSAGE) ? map.get(PAR_MESSAGE).getAsString() : null;
         this.data = map.has(PAR_DATA) ? map.get(PAR_DATA).getAsJsonObject() : null;
-        if (map.has(PAR_SUCCESS)) success = map.get(PAR_SUCCESS).getAsBoolean();
-        else
+        if (map.has(PAR_SUCCESS)) {
+            success = map.get(PAR_SUCCESS).getAsBoolean();
+        } else {
             throw new ResponseInflationFailureException(String.format(MSG_PAR_MISSING, PAR_SUCCESS));
+        }
     }
 
     static class ResponseInflationFailureException extends Throwable {

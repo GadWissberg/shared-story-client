@@ -7,4 +7,5 @@
     <color name="button_color">#ADEACC</color>
     <color name="button_text_color">#696969</color>
     <color name="underline_color">#B7CBCA</color>
+    <color name="link">#3CA4FF</color>
 </resources>

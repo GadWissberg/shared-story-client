@@ -6,10 +6,13 @@ import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gadarts.neverendingstory.activities.StoryViewActivity;
 import com.gadarts.neverendingstory.models.Story;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -19,6 +22,10 @@ import androidx.annotation.RequiresApi;
 public class StoriesListAdapter extends BaseAdapter {
     private static final String ERROR_INVALID_INDEX = "The provided index must be a natural number!";
     public static final String SELECTED_STORY = "selected_story";
+    public static final String SUFFIX_PREVIEW = "...";
+    private static final int PREVIEW_MAX_CHARS = 10;
+    private static final String LABEL_BY = "By %s";
+    private static final int ITEM_PADDING = 10;
     private final ArrayList<Story> stories = new ArrayList<>();
 
     @Override
@@ -41,19 +48,38 @@ public class StoriesListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, final ViewGroup parent) {
         if (position < 0) throw new IndexOutOfBoundsException(ERROR_INVALID_INDEX);
         Optional<View> optional = Optional.ofNullable(convertView);
-        return optional.orElseGet(() -> createNewItemView(position, parent));
+        return optional.orElseGet(() -> createListItem(position, parent));
     }
 
-    private View createNewItemView(int position, ViewGroup parent) {
+    private View createListItem(int position, ViewGroup parent) {
         Activity activity = (Activity) parent.getContext();
-        TextView textView = new TextView(activity);
         Story story = stories.get(position);
-        textView.setOnClickListener(view -> {
+        LinearLayout linearLayout = createListItemView(activity, story);
+        linearLayout.setOnClickListener(view -> {
             Intent intent = new Intent(activity, StoryViewActivity.class);
             intent.putExtra(SELECTED_STORY, story.getId());
             activity.startActivity(intent);
         });
-        textView.setText(story.getTitle());
+        return linearLayout;
+    }
+
+    @NotNull
+    private LinearLayout createListItemView(Activity activity, Story story) {
+        LinearLayout linearLayout = new LinearLayout(activity);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.setPadding(ITEM_PADDING, ITEM_PADDING, ITEM_PADDING, ITEM_PADDING);
+        TextView title = createTextView(activity, story.getTitle());
+        TextView owner = createTextView(activity, String.format(LABEL_BY, story.getOwner().getName()));
+        linearLayout.addView(title);
+        linearLayout.addView(owner);
+        return linearLayout;
+    }
+
+
+    @NotNull
+    private TextView createTextView(Activity activity, String text) {
+        TextView textView = new TextView(activity);
+        textView.setText(text);
         return textView;
     }
 

@@ -7,25 +7,18 @@
     android:paddingStart="20dp"
     android:paddingEnd="20dp">
 
-    <ImageView
-        android:layout_width="184dp"
-        android:layout_height="261dp"
-        android:layout_gravity="center"
-        android:contentDescription="@string/logo"
-        android:src="@drawable/logo" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center_vertical"
         android:layout_weight="1"
+        android:gravity="center_vertical"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@string/please_login"
+            android:text="@string/sign_up"
             android:textAlignment="center"
             android:textSize="20sp" />
 
@@ -69,16 +62,57 @@
                 android:textColorHint="@color/underline_color" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/input_repeat_password"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:backgroundTint="@color/underline_color"
+                android:drawableStart="@drawable/lock"
+                android:hint="@string/repeat_password"
+                android:imeOptions=""
+                android:importantForAutofill="no"
+                android:inputType="textPassword"
+                android:nextFocusForward="@id/button_login"
+                android:textColorHint="@color/underline_color" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <EditText
+                android:id="@+id/input_user_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:autofillHints="name"
+                android:backgroundTint="@color/underline_color"
+                android:drawableStart="@drawable/user"
+                android:drawablePadding="5dp"
+                android:hint="@string/user_name"
+                android:inputType="textPersonName"
+                android:textColorHint="@color/underline_color" />
+        </LinearLayout>
+
         <TextView
-            android:id="@+id/link_join_now"
+            android:id="@+id/link_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="20dp"
             android:gravity="center"
-            android:text="@string/join_now"
+            android:text="@string/login_instead"
             android:textColor="@color/link"
             android:textSize="@dimen/link_size" />
+
     </LinearLayout>
 
 
@@ -86,23 +120,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom"
-        android:padding="25dp">
+        android:padding="50dp">
 
         <Button
-            android:id="@+id/button_login"
+            android:id="@+id/button_signup"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:background="@drawable/button"
             android:padding="10dp"
-            android:text="@string/login"
+            android:text="@string/signup_button"
             android:textColor="@color/button_text_color" />
-
     </RelativeLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/version_name" />
 </LinearLayout>
