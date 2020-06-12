@@ -21,4 +21,5 @@
     <string name="join_now">Not signed-up? Join now!</string>
     <string name="login_instead">Already signed-up? Login instead</string>
     <string name="version_name">0.0.1</string>
+    <string name="header_latest_stories">Latest Stories:</string>
 </resources>

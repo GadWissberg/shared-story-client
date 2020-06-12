@@ -20,4 +20,5 @@
     <string name="signup_button">הרשם</string>
     <string name="join_now">לא רשום? הצטרף כעת!</string>
     <string name="login_instead">רשום כבר? התחבר</string>
+    <string name="header_latest_stories">סיפורים אחרונים:</string>
 </resources>
