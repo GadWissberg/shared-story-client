@@ -12,8 +12,8 @@ import lombok.Getter;
 import okhttp3.OkHttpClient;
 
 @Getter
-public class PolyTaleApplication extends Application {
-    public static final String HOST = "http://192.168.1.136:5000/";
+public class OurTaleApplication extends Application {
+    public static final String HOST = "http://192.168.1.4:5000/";
     private OkHttpClient client = new OkHttpClient();
     private DataInflater dataInflater = new DataInflater();
 

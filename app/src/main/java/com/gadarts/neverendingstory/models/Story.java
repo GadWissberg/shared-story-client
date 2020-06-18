@@ -1,9 +1,9 @@
 package com.gadarts.neverendingstory.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class Story {
@@ -11,11 +11,9 @@ public class Story {
     private final long id;
     private final User owner;
 
-    @Setter
-    private List<Paragraph> paragraphs;
+    private List<Paragraph> paragraphs = new ArrayList<>();
 
-    @Setter
-    private List<Paragraph> suggestions;
+    private List<Paragraph> suggestions = new ArrayList<>();
 
     public Story(long id, String title, User owner) {
         this.id = id;

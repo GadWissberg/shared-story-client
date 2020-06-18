@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gadarts.neverendingstory.PolyTaleApplication;
+import com.gadarts.neverendingstory.OurTaleApplication;
 import com.gadarts.neverendingstory.R;
 import com.gadarts.neverendingstory.services.http.AppRequest;
 import com.gadarts.neverendingstory.services.http.HttpCallTask;
@@ -28,7 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import okhttp3.OkHttpClient;
 
-import static com.gadarts.neverendingstory.PolyTaleApplication.HOST;
+import static com.gadarts.neverendingstory.OurTaleApplication.HOST;
 
 public class SignUpActivity extends FragmentActivity {
     static final String PREFS_LOGIN = "login";
@@ -109,7 +109,7 @@ public class SignUpActivity extends FragmentActivity {
                             Toast.LENGTH_LONG).show());
                     goToLoginIfNoResponseWasFound(response);
                 });
-        OkHttpClient client = ((PolyTaleApplication) getApplication()).getClient();
+        OkHttpClient client = ((OurTaleApplication) getApplication()).getClient();
         AppRequest request = new AppRequest(SIGNUP, RequestType.POST, onRequestResults);
         request.setParameters(createSignupParameters(mailInput, passwordInput, userNameInputText));
         HttpCallTask task = new HttpCallTask(client, request, getApplicationContext());

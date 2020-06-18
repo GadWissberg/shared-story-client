@@ -6,7 +6,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.gadarts.neverendingstory.PolyTaleApplication;
+import com.gadarts.neverendingstory.OurTaleApplication;
 import com.gadarts.neverendingstory.R;
 import com.gadarts.neverendingstory.services.http.AppRequest;
 import com.gadarts.neverendingstory.services.http.HttpCallTask;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 import androidx.fragment.app.FragmentActivity;
 import okhttp3.OkHttpClient;
 
-import static com.gadarts.neverendingstory.PolyTaleApplication.HOST;
+import static com.gadarts.neverendingstory.OurTaleApplication.HOST;
 
 
 public class NewStoryActivity extends FragmentActivity {
@@ -52,7 +52,7 @@ public class NewStoryActivity extends FragmentActivity {
     private void submitStory(EditText titleEditText,
                              EditText paragraphEditText,
                              OnRequestResult onSuccess) {
-        OkHttpClient client = ((PolyTaleApplication) getApplication()).getClient();
+        OkHttpClient client = ((OurTaleApplication) getApplication()).getClient();
         AppRequest request = new AppRequest(POST_NEW_STORY, RequestType.POST, onSuccess);
         HttpCallTask task = new HttpCallTask(client, request, getApplicationContext());
         HashMap<String, Object> parameters = new HashMap<>();

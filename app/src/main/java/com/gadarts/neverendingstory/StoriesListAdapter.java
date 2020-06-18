@@ -22,10 +22,11 @@ import androidx.annotation.RequiresApi;
 public class StoriesListAdapter extends BaseAdapter {
     private static final String ERROR_INVALID_INDEX = "The provided index must be a natural number!";
     public static final String SELECTED_STORY = "selected_story";
-    public static final String SUFFIX_PREVIEW = "...";
-    private static final int PREVIEW_MAX_CHARS = 10;
     private static final String LABEL_BY = "By %s";
     private static final int ITEM_PADDING = 10;
+    private static final int PREVIEW_PADDING = 20;
+    private static final int PREVIEW_MARGIN = 10;
+    private static final int TEXT_VIEW_PADDING = 10;
     private final ArrayList<Story> stories = new ArrayList<>();
 
     @Override
@@ -68,17 +69,34 @@ public class StoriesListAdapter extends BaseAdapter {
         LinearLayout linearLayout = new LinearLayout(activity);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setPadding(ITEM_PADDING, ITEM_PADDING, ITEM_PADDING, ITEM_PADDING);
-        TextView title = createTextView(activity, story.getTitle());
-        TextView owner = createTextView(activity, String.format(LABEL_BY, story.getOwner().getName()));
-        linearLayout.addView(title);
-        linearLayout.addView(owner);
+        linearLayout.addView(createTextView(activity, story.getTitle()));
+        createPreview(activity, story, linearLayout);
+        String labelBy = String.format(LABEL_BY, story.getOwner().getName());
+        linearLayout.addView(createTextView(activity, labelBy));
         return linearLayout;
+    }
+
+    private void createPreview(Activity activity, Story story, LinearLayout linearLayout) {
+        TextView preview = createTextView(activity, story.getParagraphs().get(0).getContent());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        preview.setPadding(PREVIEW_PADDING, PREVIEW_PADDING, PREVIEW_PADDING, PREVIEW_PADDING);
+        params.setMargins(PREVIEW_MARGIN, PREVIEW_MARGIN, PREVIEW_MARGIN, PREVIEW_MARGIN);
+        preview.setLayoutParams(params);
+        preview.setBackground(activity.getDrawable(R.drawable.text_view_rounded_corners));
+        linearLayout.addView(preview);
     }
 
 
     @NotNull
     private TextView createTextView(Activity activity, String text) {
         TextView textView = new TextView(activity);
+        textView.setPadding(
+                TEXT_VIEW_PADDING,
+                TEXT_VIEW_PADDING,
+                TEXT_VIEW_PADDING,
+                TEXT_VIEW_PADDING);
         textView.setText(text);
         return textView;
     }

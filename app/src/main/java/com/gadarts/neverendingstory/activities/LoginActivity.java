@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gadarts.neverendingstory.PolyTaleApplication;
+import com.gadarts.neverendingstory.OurTaleApplication;
 import com.gadarts.neverendingstory.R;
 import com.gadarts.neverendingstory.services.http.AppRequest;
 import com.gadarts.neverendingstory.services.http.HttpCallTask;
@@ -28,7 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import okhttp3.OkHttpClient;
 
-import static com.gadarts.neverendingstory.PolyTaleApplication.HOST;
+import static com.gadarts.neverendingstory.OurTaleApplication.HOST;
 
 public class LoginActivity extends FragmentActivity {
     static final String PREFS_LOGIN = "login";
@@ -38,7 +38,8 @@ public class LoginActivity extends FragmentActivity {
     private static final String VALIDATION_MSG_EMPTY = "The field %s cannot be empty.";
     private static final String VALIDATION_MSG_INVALID = "The given e-mail is invalid";
     private static final int PASS_MIN_SIZE = 8;
-    private static final String VALIDATION_MSG_PASS_SHORT = "The given password is too short. It has to be atleast 8 characters.";
+    private static final String VALIDATION_MSG_PASS_SHORT = "The given password is too short. It " +
+            "has to be atleast 8 characters.";
     private static final String OPTION_AUTO_LOGIN = "auto_login";
 
     @Override
@@ -109,7 +110,7 @@ public class LoginActivity extends FragmentActivity {
                             Toast.LENGTH_LONG).show());
                     goToLoginIfNoResponseWasFound(response);
                 });
-        OkHttpClient client = ((PolyTaleApplication) getApplication()).getClient();
+        OkHttpClient client = ((OurTaleApplication) getApplication()).getClient();
         AppRequest request = new AppRequest(LOGIN, RequestType.POST, onRequestResults);
         request.setParameters(createLoginParameters(mailInput, passwordInput));
         HttpCallTask task = new HttpCallTask(client, request, getApplicationContext());

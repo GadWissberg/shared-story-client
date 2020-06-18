@@ -8,11 +8,10 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.gadarts.neverendingstory.PolyTaleApplication;
+import com.gadarts.neverendingstory.OurTaleApplication;
 import com.gadarts.neverendingstory.R;
 import com.gadarts.neverendingstory.StoriesListAdapter;
 import com.gadarts.neverendingstory.models.Story;
-import com.gadarts.neverendingstory.models.User;
 import com.gadarts.neverendingstory.services.DataInflater;
 import com.gadarts.neverendingstory.services.http.AppRequest;
 import com.gadarts.neverendingstory.services.http.HttpCallTask;
@@ -26,9 +25,7 @@ import java.util.Optional;
 
 import androidx.annotation.Nullable;
 
-import static com.gadarts.neverendingstory.PolyTaleApplication.HOST;
-import static com.gadarts.neverendingstory.services.DataInflater.KEY_OWNER;
-import static com.gadarts.neverendingstory.services.DataInflater.KEY_TITLE;
+import static com.gadarts.neverendingstory.OurTaleApplication.HOST;
 
 public class ListActivity extends Activity {
     private static final int REQUEST_CODE_NEW_STORY = 0;
@@ -62,17 +59,15 @@ public class ListActivity extends Activity {
             jsonObject.entrySet().forEach((storyEntry) -> {
                 JsonObject storyJsonObject = storyEntry.getValue().getAsJsonObject();
                 long id = Long.parseLong(storyEntry.getKey());
-                String title = storyJsonObject.get(KEY_TITLE).getAsString();
-                DataInflater dataInflater = ((PolyTaleApplication) getApplication()).getDataInflater();
-                JsonObject ownerJsonObject = storyJsonObject.get(KEY_OWNER).getAsJsonObject();
-                User owner = dataInflater.inflateUser(ownerJsonObject);
-                stories.add(new Story(id, title, owner));
+                DataInflater dataInflater = ((OurTaleApplication) getApplication()).getDataInflater();
+                Story story = dataInflater.inflateStory(id, storyJsonObject);
+                stories.add(story);
             });
             inflateStoriesListView(stories);
         };
         AppRequest request = new AppRequest(GET_STORIES, HttpCallTask.RequestType.GET, onSuccess);
         new HttpCallTask(
-                ((PolyTaleApplication) getApplication()).getClient(),
+                ((OurTaleApplication) getApplication()).getClient(),
                 request,
                 getApplicationContext()).execute();
     }

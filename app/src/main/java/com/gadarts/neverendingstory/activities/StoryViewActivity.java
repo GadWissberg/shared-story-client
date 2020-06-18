@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gadarts.neverendingstory.PolyTaleApplication;
+import com.gadarts.neverendingstory.OurTaleApplication;
 import com.gadarts.neverendingstory.R;
 import com.gadarts.neverendingstory.models.Paragraph;
 import com.gadarts.neverendingstory.models.Story;
@@ -24,7 +24,7 @@ import java.util.List;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
-import static com.gadarts.neverendingstory.PolyTaleApplication.HOST;
+import static com.gadarts.neverendingstory.OurTaleApplication.HOST;
 import static com.gadarts.neverendingstory.StoriesListAdapter.SELECTED_STORY;
 
 public class StoryViewActivity extends FragmentActivity {
@@ -40,7 +40,7 @@ public class StoryViewActivity extends FragmentActivity {
         setContentView(R.layout.activity_story_view);
         TextView title = findViewById(R.id.story_view_header);
         title.setText("LOADING");
-        PolyTaleApplication application = (PolyTaleApplication) getApplication();
+        OurTaleApplication application = (OurTaleApplication) getApplication();
         long storyId = getIntent().getLongExtra(SELECTED_STORY, 0);
         AppRequest appRequest = new AppRequest(GET_STORY, RequestType.GET, (response, context) -> initializeStoryView(storyId, response));
         appRequest.addParameter(KEY_REQUEST_ID, storyId);
@@ -68,7 +68,7 @@ public class StoryViewActivity extends FragmentActivity {
     private void initializeStoryView(long storyId, ServerResponse response) {
         TextView title = findViewById(R.id.story_view_header);
         JsonObject data = response.getData();
-        DataInflater dataInflater = ((PolyTaleApplication) getApplication()).getDataInflater();
+        DataInflater dataInflater = ((OurTaleApplication) getApplication()).getDataInflater();
         Story story = dataInflater.inflateStory(storyId, data);
         title.setText(story.getTitle());
         TextView owner = findViewById(R.id.story_view_owner);
