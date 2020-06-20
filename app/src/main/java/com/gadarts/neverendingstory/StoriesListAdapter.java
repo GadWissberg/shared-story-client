@@ -77,6 +77,7 @@ public class StoriesListAdapter extends BaseAdapter {
     }
 
     private void createPreview(Activity activity, Story story, LinearLayout linearLayout) {
+        if (story.getParagraphs().isEmpty()) return;
         TextView preview = createTextView(activity, story.getParagraphs().get(0).getContent());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
