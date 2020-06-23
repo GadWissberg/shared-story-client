@@ -25,16 +25,17 @@
         android:textSize="15sp" />
 
     <LinearLayout
+        android:layout_margin="10dp"
         android:id="@+id/story_view_paragraphs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"></LinearLayout>
+        android:orientation="vertical" />
 
     <LinearLayout
         android:id="@+id/story_view_suggested_paragraphs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"></LinearLayout>
+        android:orientation="vertical" />
 
     <Button
         android:id="@+id/button_suggest"
@@ -46,7 +47,7 @@
         android:id="@+id/edit_text_paragraph_suggestion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/hint_new_story_paragraph"
+        android:hint="@string/hint_suggest_story_paragraph"
         android:importantForAutofill="no"
         android:inputType="text"
         android:visibility="gone" />

@@ -20,6 +20,7 @@
     <string name="signup_button">Sign Up</string>
     <string name="join_now">Not signed-up? Join now!</string>
     <string name="login_instead">Already signed-up? Login instead</string>
-    <string name="version_name">0.0.1</string>
+    <string name="version_name" translatable="false">0.0.1</string>
     <string name="header_latest_stories">Latest Stories:</string>
+    <string name="hint_suggest_story_paragraph">Write here your continuance...</string>
 </resources>

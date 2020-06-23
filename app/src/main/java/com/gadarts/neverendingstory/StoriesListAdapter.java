@@ -27,6 +27,8 @@ public class StoriesListAdapter extends BaseAdapter {
     private static final int PREVIEW_PADDING = 20;
     private static final int PREVIEW_MARGIN = 10;
     private static final int TEXT_VIEW_PADDING = 10;
+    public static final String THREE_POINTS = "...";
+    private static final int MAX_PREVIEW_LENGTH = 80;
     private final ArrayList<Story> stories = new ArrayList<>();
 
     @Override
@@ -78,7 +80,7 @@ public class StoriesListAdapter extends BaseAdapter {
 
     private void createPreview(Activity activity, Story story, LinearLayout linearLayout) {
         if (story.getParagraphs().isEmpty()) return;
-        TextView preview = createTextView(activity, story.getParagraphs().get(0).getContent());
+        TextView preview = createTextView(activity, getPreviewShortened(story));
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -87,6 +89,14 @@ public class StoriesListAdapter extends BaseAdapter {
         preview.setLayoutParams(params);
         preview.setBackground(activity.getDrawable(R.drawable.text_view_rounded_corners));
         linearLayout.addView(preview);
+    }
+
+    private String getPreviewShortened(Story story) {
+        String content = story.getParagraphs().get(0).getContent();
+        if (content.length() > MAX_PREVIEW_LENGTH) {
+            content = content.substring(0, MAX_PREVIEW_LENGTH) + THREE_POINTS;
+        }
+        return content;
     }
 
 

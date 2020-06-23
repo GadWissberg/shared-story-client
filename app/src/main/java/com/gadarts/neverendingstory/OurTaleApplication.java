@@ -13,7 +13,7 @@ import okhttp3.OkHttpClient;
 
 @Getter
 public class OurTaleApplication extends Application {
-    public static final String HOST = "http://192.168.1.4:5000/";
+    public static final String HOST = "http://GAD-LT-PRS:5000/";
     private OkHttpClient client = new OkHttpClient();
     private DataInflater dataInflater = new DataInflater();
 

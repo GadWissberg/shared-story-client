@@ -33,6 +33,7 @@ public class StoryViewActivity extends FragmentActivity {
     private static final String KEY_REQUEST_ID = "id";
     private static final String KEY_REQUEST_STORY_ID = "story_id";
     private static final String KEY_REQUEST_PARAGRAPH = "paragraph";
+    private static final String LABEL_BY = "By %s";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,11 +58,12 @@ public class StoryViewActivity extends FragmentActivity {
             AppRequest request = new AppRequest(POST_PARAGRAPH_SUGGESTION, RequestType.POST,
                     (response, context) -> Toast.makeText(
                             context,
-                            "Suggested paragraph",
+                            "Paragraph has been suggested ",
                             Toast.LENGTH_LONG).show());
             request.addParameter(KEY_REQUEST_STORY_ID, storyId);
             request.addParameter(KEY_REQUEST_PARAGRAPH, paragraphSuggestionEditText.getText());
             new HttpCallTask(application.getClient(), request, getApplicationContext()).execute();
+            finish();
         });
     }
 
@@ -72,7 +74,7 @@ public class StoryViewActivity extends FragmentActivity {
         Story story = dataInflater.inflateStory(storyId, data);
         title.setText(story.getTitle());
         TextView owner = findViewById(R.id.story_view_owner);
-        owner.setText(story.getOwner().getName());
+        owner.setText(String.format(LABEL_BY, story.getOwner().getName()));
         story.getParagraphs().forEach(paragraph -> addTextViewToParagraphsLayout(paragraph.getContent()));
         List<Paragraph> suggestions = story.getSuggestions();
         if (!suggestions.isEmpty()) {
