@@ -33,7 +33,7 @@ public class ListActivity extends Activity {
     private static final String KEY_STORIES = "stories";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         Button logout = findViewById(R.id.button_logout);
@@ -81,7 +81,9 @@ public class ListActivity extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(final int requestCode,
+                                    final int resultCode,
+                                    @Nullable final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_NEW_STORY && resultCode == RESULT_OK) {
             clearStories();
@@ -95,7 +97,7 @@ public class ListActivity extends Activity {
                 ((StoriesListAdapter) view.getAdapter()).clear());
     }
 
-    private void inflateStoriesListView(ArrayList<Story> stories) {
+    private void inflateStoriesListView(final ArrayList<Story> stories) {
         ListView listView = findViewById(R.id.stories_list);
         StoriesListAdapter adapter = (StoriesListAdapter) listView.getAdapter();
         adapter.setList(stories);

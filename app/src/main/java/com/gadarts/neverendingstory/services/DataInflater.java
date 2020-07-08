@@ -8,7 +8,6 @@ import com.google.gson.JsonObject;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,18 +24,20 @@ public class DataInflater {
     private static final String KEY_OWNER_ID = "owner_id";
     private static final String KEY_CONTENT = "content";
     private static final String KEY_FIRST_PARAGRAPH = "first_paragraph";
+    private static final String KEY_PARTICIPANTS = "participants";
 
     private final Map<Long, Story> cachedStories = new HashMap<>();
+
     private final Map<Long, User> cachedUsers = new HashMap<>();
     private final Map<Long, Paragraph> cachedParagraphs = new HashMap<>();
 
-    public Story inflateStory(long storyId, @NotNull JsonObject jsonObject) {
+    public Story inflateStory(final long storyId, @NotNull final JsonObject jsonObject) {
         if (cachedStories.containsKey(storyId)) return cachedStories.get(storyId);
         return createStory(storyId, jsonObject);
     }
 
     @NotNull
-    private Story createStory(long storyId, @NotNull JsonObject jsonObject) {
+    private Story createStory(final long storyId, @NotNull final JsonObject jsonObject) {
         User user = inflateUser(jsonObject.get(KEY_OWNER).getAsJsonObject());
         Story story = new Story(storyId, jsonObject.get(KEY_TITLE).getAsString(), user);
         if (jsonObject.has(KEY_PARAGRAPHS)) {
@@ -48,38 +49,37 @@ public class DataInflater {
         return story;
     }
 
-    private void inflateFirstParagraph(@NotNull JsonObject jsonObject, Story story) {
+    private void inflateFirstParagraph(@NotNull final JsonObject jsonObject, final Story story) {
         Optional.ofNullable(story.getParagraphs()).ifPresent(paragraphs -> {
             paragraphs.clear();
             paragraphs.add(inflateParagraph(jsonObject.get(KEY_FIRST_PARAGRAPH).getAsJsonObject()));
         });
     }
 
-    private void inflateAllParagraphs(JsonObject jsonObject, Story story) {
-        JsonArray paragraphsJsonArray = jsonObject.get(KEY_PARAGRAPHS).getAsJsonArray();
-        List<Paragraph> paragraphs = story.getParagraphs();
-        paragraphs.clear();
-        paragraphs.addAll(inflateParagraphs(paragraphsJsonArray));
-        JsonArray suggestionsJsonArray = jsonObject.get(KEY_PARAGRAPHS_SUGGESTIONS).getAsJsonArray();
-        List<Paragraph> suggestions = story.getSuggestions();
-        suggestions.clear();
-        suggestions.addAll(inflateParagraphs(suggestionsJsonArray));
+    private void inflateAllParagraphs(final JsonObject json, final Story story) {
+        JsonArray participants = json.get(KEY_PARTICIPANTS).getAsJsonArray();
+        participants.forEach(participantJson -> inflateUser(participantJson.getAsJsonObject()));
+        inflateParagraphs(json, KEY_PARAGRAPHS, story.getParagraphs());
+        inflateParagraphs(json, KEY_PARAGRAPHS_SUGGESTIONS, story.getSuggestions());
     }
 
-    private List<Paragraph> inflateParagraphs(JsonArray paragraphsJsonArray) {
-        ArrayList<Paragraph> result = new ArrayList<>();
-        paragraphsJsonArray.forEach(json -> result.add(inflateParagraph(json.getAsJsonObject())));
-        return result;
+    private void inflateParagraphs(final JsonObject json,
+                                   final String keyParagraphs,
+                                   final List<Paragraph> output) {
+        output.clear();
+        JsonArray asJsonArray = json.get(keyParagraphs).getAsJsonArray();
+        asJsonArray.forEach(paragraphJson -> output.add(inflateParagraph(json.getAsJsonObject())));
     }
 
-    public Paragraph inflateParagraph(JsonObject paragraphJsonObject) {
-        long pId = paragraphJsonObject.get(KEY_ID).getAsLong();
+
+    public Paragraph inflateParagraph(final JsonObject pJsonObject) {
+        long pId = pJsonObject.get(KEY_ID).getAsLong();
         boolean contains = cachedParagraphs.containsKey(pId);
-        return contains ? cachedParagraphs.get(pId) : createParagraph(paragraphJsonObject);
+        return contains ? cachedParagraphs.get(pId) : createParagraph(pJsonObject);
     }
 
     @NotNull
-    private Paragraph createParagraph(JsonObject asJsonObject) {
+    private Paragraph createParagraph(final JsonObject asJsonObject) {
         long pId = asJsonObject.get(KEY_ID).getAsLong();
         Paragraph paragraph;
         long storyId = asJsonObject.get(KEY_STORY_ID).getAsLong();
@@ -89,14 +89,19 @@ public class DataInflater {
         return paragraph;
     }
 
-    public User inflateUser(JsonObject ownerJsonObject) {
+    public User inflateUser(final JsonObject ownerJsonObject) {
         User user;
         long userId = ownerJsonObject.get(KEY_ID).getAsLong();
         if (cachedUsers.containsKey(userId)) {
             user = cachedUsers.get(userId);
         } else {
             user = new User(userId, ownerJsonObject.get(KEY_NAME).getAsString());
+            cachedUsers.put(userId, user);
         }
         return user;
+    }
+
+    public User getUserFromCache(long id) {
+        return cachedUsers.get(id);
     }
 }

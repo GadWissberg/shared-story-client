@@ -37,24 +37,24 @@ public class StoriesListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public Object getItem(final int position) {
         return stories.get(position);
     }
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(final int position) {
         return position;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
-    public View getView(final int position, View convertView, final ViewGroup parent) {
+    public View getView(final int position, final View convertView, final ViewGroup parent) {
         if (position < 0) throw new IndexOutOfBoundsException(ERROR_INVALID_INDEX);
         Optional<View> optional = Optional.ofNullable(convertView);
         return optional.orElseGet(() -> createListItem(position, parent));
     }
 
-    private View createListItem(int position, ViewGroup parent) {
+    private View createListItem(final int position, final ViewGroup parent) {
         Activity activity = (Activity) parent.getContext();
         Story story = stories.get(position);
         LinearLayout linearLayout = createListItemView(activity, story);
@@ -67,7 +67,7 @@ public class StoriesListAdapter extends BaseAdapter {
     }
 
     @NotNull
-    private LinearLayout createListItemView(Activity activity, Story story) {
+    private LinearLayout createListItemView(final Activity activity, final Story story) {
         LinearLayout linearLayout = new LinearLayout(activity);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setPadding(ITEM_PADDING, ITEM_PADDING, ITEM_PADDING, ITEM_PADDING);
@@ -78,7 +78,9 @@ public class StoriesListAdapter extends BaseAdapter {
         return linearLayout;
     }
 
-    private void createPreview(Activity activity, Story story, LinearLayout linearLayout) {
+    private void createPreview(final Activity activity,
+                               final Story story,
+                               final LinearLayout linearLayout) {
         if (story.getParagraphs().isEmpty()) return;
         TextView preview = createTextView(activity, getPreviewShortened(story));
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -91,7 +93,7 @@ public class StoriesListAdapter extends BaseAdapter {
         linearLayout.addView(preview);
     }
 
-    private String getPreviewShortened(Story story) {
+    private String getPreviewShortened(final Story story) {
         String content = story.getParagraphs().get(0).getContent();
         if (content.length() > MAX_PREVIEW_LENGTH) {
             content = content.substring(0, MAX_PREVIEW_LENGTH) + THREE_POINTS;
@@ -101,7 +103,7 @@ public class StoriesListAdapter extends BaseAdapter {
 
 
     @NotNull
-    private TextView createTextView(Activity activity, String text) {
+    private TextView createTextView(final Activity activity, final String text) {
         TextView textView = new TextView(activity);
         textView.setPadding(
                 TEXT_VIEW_PADDING,
@@ -116,7 +118,7 @@ public class StoriesListAdapter extends BaseAdapter {
         stories.clear();
     }
 
-    public void setList(ArrayList<Story> stories) {
+    public void setList(final ArrayList<Story> stories) {
         this.stories.clear();
         this.stories.addAll(stories);
     }

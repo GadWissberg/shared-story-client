@@ -1,5 +1,6 @@
 package com.gadarts.neverendingstory.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import com.gadarts.neverendingstory.OurTaleApplication;
 import com.gadarts.neverendingstory.R;
 import com.gadarts.neverendingstory.models.Paragraph;
 import com.gadarts.neverendingstory.models.Story;
+import com.gadarts.neverendingstory.models.User;
 import com.gadarts.neverendingstory.services.DataInflater;
 import com.gadarts.neverendingstory.services.http.AppRequest;
 import com.gadarts.neverendingstory.services.http.HttpCallTask;
@@ -33,10 +35,11 @@ public class StoryViewActivity extends FragmentActivity {
     private static final String KEY_REQUEST_ID = "id";
     private static final String KEY_REQUEST_STORY_ID = "story_id";
     private static final String KEY_REQUEST_PARAGRAPH = "paragraph";
+    private static final String LABEL_STARTED_BY = "Started by %s";
     private static final String LABEL_BY = "By %s";
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_story_view);
         TextView title = findViewById(R.id.story_view_header);
@@ -67,26 +70,30 @@ public class StoryViewActivity extends FragmentActivity {
         });
     }
 
-    private void initializeStoryView(long storyId, ServerResponse response) {
+    private void initializeStoryView(final long storyId, final ServerResponse response) {
         TextView title = findViewById(R.id.story_view_header);
         JsonObject data = response.getData();
         DataInflater dataInflater = ((OurTaleApplication) getApplication()).getDataInflater();
         Story story = dataInflater.inflateStory(storyId, data);
         title.setText(story.getTitle());
         TextView owner = findViewById(R.id.story_view_owner);
-        owner.setText(String.format(LABEL_BY, story.getOwner().getName()));
-        story.getParagraphs().forEach(paragraph -> addTextViewToParagraphsLayout(paragraph.getContent()));
+        owner.setText(String.format(LABEL_STARTED_BY, story.getOwner().getName()));
+        story.getParagraphs().forEach(paragraph -> addParagraphToParagraphsLayout(paragraph.getContent(), dataInflater.getUserFromCache(paragraph.getOwnerId())));
         List<Paragraph> suggestions = story.getSuggestions();
         if (!suggestions.isEmpty()) {
-            addTextViewToParagraphsLayout("SUGGESTIONS:");
-            suggestions.forEach(paragraph -> addTextViewToParagraphsLayout(paragraph.getContent()));
+            suggestions.forEach(paragraph -> addParagraphToParagraphsLayout(paragraph.getContent(), dataInflater.getUserFromCache(paragraph.getOwnerId())));
         }
     }
 
-    private void addTextViewToParagraphsLayout(String content) {
+    private void addParagraphToParagraphsLayout(final String content, final User userFromCache) {
         LinearLayout linearLayout = findViewById(R.id.story_view_paragraphs);
-        TextView textView = new TextView(getApplicationContext());
-        textView.setText(content);
-        linearLayout.addView(textView);
+        Context applicationContext = getApplicationContext();
+        TextView paragraph = new TextView(applicationContext);
+        paragraph.setBackground(getDrawable(R.drawable.text_view_rounded_corners));
+        paragraph.setText(content);
+        TextView author = new TextView(applicationContext);
+        author.setText(String.format(LABEL_BY, userFromCache.getName()));
+        linearLayout.addView(paragraph);
+        linearLayout.addView(author);
     }
 }
