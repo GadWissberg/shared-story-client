@@ -78,18 +78,22 @@ public class StoryViewActivity extends FragmentActivity {
         title.setText(story.getTitle());
         TextView owner = findViewById(R.id.story_view_owner);
         owner.setText(String.format(LABEL_STARTED_BY, story.getOwner().getName()));
-        story.getParagraphs().forEach(paragraph -> addParagraphToParagraphsLayout(paragraph.getContent(), dataInflater.getUserFromCache(paragraph.getOwnerId())));
+        story.getParagraphs().forEach(paragraph -> addParagraphToParagraphsLayout(paragraph.getContent(), dataInflater.getUserFromCache(paragraph.getOwnerId()), R.drawable.regular_paragraph_view, R.id.story_view_paragraphs));
         List<Paragraph> suggestions = story.getSuggestions();
         if (!suggestions.isEmpty()) {
-            suggestions.forEach(paragraph -> addParagraphToParagraphsLayout(paragraph.getContent(), dataInflater.getUserFromCache(paragraph.getOwnerId())));
+            findViewById(R.id.label_no_suggestions).setVisibility(View.GONE);
+            suggestions.forEach(paragraph -> addParagraphToParagraphsLayout(paragraph.getContent(), dataInflater.getUserFromCache(paragraph.getOwnerId()), R.drawable.suggestion_view, R.id.story_view_suggested_paragraphs));
         }
     }
 
-    private void addParagraphToParagraphsLayout(final String content, final User userFromCache) {
-        LinearLayout linearLayout = findViewById(R.id.story_view_paragraphs);
+    private void addParagraphToParagraphsLayout(final String content,
+                                                final User userFromCache,
+                                                final int regular_paragraph_view,
+                                                final int layoutId) {
+        LinearLayout linearLayout = findViewById(layoutId);
         Context applicationContext = getApplicationContext();
         TextView paragraph = new TextView(applicationContext);
-        paragraph.setBackground(getDrawable(R.drawable.text_view_rounded_corners));
+        paragraph.setBackground(getDrawable(regular_paragraph_view));
         paragraph.setText(content);
         TextView author = new TextView(applicationContext);
         author.setText(String.format(LABEL_BY, userFromCache.getName()));

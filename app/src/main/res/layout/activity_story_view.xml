@@ -24,38 +24,64 @@
         android:textAlignment="center"
         android:textSize="15sp" />
 
-    <LinearLayout
-        android:layout_margin="10dp"
-        android:id="@+id/story_view_paragraphs"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" />
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-    <LinearLayout
-        android:id="@+id/story_view_suggested_paragraphs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" />
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="1">
 
-    <Button
-        android:id="@+id/button_suggest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/suggest" />
+            <LinearLayout
+                android:id="@+id/story_view_paragraphs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical" />
 
-    <EditText
-        android:id="@+id/edit_text_paragraph_suggestion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/hint_suggest_story_paragraph"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:visibility="gone" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/header_suggested_paragraphs" />
 
-    <Button
-        android:id="@+id/button_submit_suggestion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/submit_suggestion"
-        android:visibility="gone" />
+            <LinearLayout
+                android:id="@+id/story_view_suggested_paragraphs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/label_no_suggestions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="@string/label_no_suggestions" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/button_suggest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/suggest" />
+
+            <EditText
+                android:id="@+id/edit_text_paragraph_suggestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_suggest_story_paragraph"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/button_submit_suggestion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/submit_suggestion"
+                android:visibility="gone" />
+        </TableLayout>
+    </ScrollView>
 </LinearLayout>

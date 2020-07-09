@@ -23,4 +23,6 @@
     <string name="version_name" translatable="false">0.0.1</string>
     <string name="header_latest_stories">Latest Stories:</string>
     <string name="hint_suggest_story_paragraph">Write here your continuance...</string>
+    <string name="header_suggested_paragraphs">Suggested Paragraphs:</string>
+    <string name="label_no_suggestions">Be the first to suggest a contiuance!</string>
 </resources>

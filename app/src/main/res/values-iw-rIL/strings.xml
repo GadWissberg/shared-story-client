@@ -22,4 +22,6 @@
     <string name="login_instead">רשום כבר? התחבר</string>
     <string name="header_latest_stories">סיפורים אחרונים:</string>
     <string name="hint_suggest_story_paragraph">הצע את פסקת ההמשך…</string>
+    <string name="header_suggested_paragraphs">הצעות להמשך הסיפור:</string>
+    <string name="label_no_suggestions">היה הראשון להציע המשך!</string>
 </resources>

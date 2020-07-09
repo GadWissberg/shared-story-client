@@ -5,6 +5,7 @@
     <color name="colorAccent">#D81B60</color>
     <color name="app_background_color">#DFF8F7</color>
     <color name="paragraph_background_color">#D9F1F0</color>
+    <color name="suggestion_background_color">#DFDCBE</color>
     <color name="button_color">#ADEACC</color>
     <color name="button_text_color">#696969</color>
     <color name="underline_color">#B7CBCA</color>

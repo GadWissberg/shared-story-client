@@ -89,7 +89,7 @@ public class StoriesListAdapter extends BaseAdapter {
         preview.setPadding(PREVIEW_PADDING, PREVIEW_PADDING, PREVIEW_PADDING, PREVIEW_PADDING);
         params.setMargins(PREVIEW_MARGIN, PREVIEW_MARGIN, PREVIEW_MARGIN, PREVIEW_MARGIN);
         preview.setLayoutParams(params);
-        preview.setBackground(activity.getDrawable(R.drawable.text_view_rounded_corners));
+        preview.setBackground(activity.getDrawable(R.drawable.regular_paragraph_view));
         linearLayout.addView(preview);
     }
 
