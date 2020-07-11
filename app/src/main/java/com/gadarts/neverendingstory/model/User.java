@@ -1,4 +1,4 @@
-package com.gadarts.neverendingstory.models;
+package com.gadarts.neverendingstory.model;
 
 import lombok.Getter;
 

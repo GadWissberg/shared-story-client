@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gadarts.neverendingstory.activities.StoryViewActivity;
-import com.gadarts.neverendingstory.models.Story;
+import com.gadarts.neverendingstory.model.Story;
 
 import org.jetbrains.annotations.NotNull;
 

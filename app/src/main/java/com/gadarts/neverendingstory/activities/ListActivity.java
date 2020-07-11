@@ -11,7 +11,7 @@ import android.widget.ListView;
 import com.gadarts.neverendingstory.OurTaleApplication;
 import com.gadarts.neverendingstory.R;
 import com.gadarts.neverendingstory.StoriesListAdapter;
-import com.gadarts.neverendingstory.models.Story;
+import com.gadarts.neverendingstory.model.Story;
 import com.gadarts.neverendingstory.services.DataInflater;
 import com.gadarts.neverendingstory.services.http.AppRequest;
 import com.gadarts.neverendingstory.services.http.HttpCallTask;

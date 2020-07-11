@@ -1,8 +1,8 @@
 package com.gadarts.neverendingstory.services;
 
-import com.gadarts.neverendingstory.models.Paragraph;
-import com.gadarts.neverendingstory.models.Story;
-import com.gadarts.neverendingstory.models.User;
+import com.gadarts.neverendingstory.model.Paragraph;
+import com.gadarts.neverendingstory.model.Story;
+import com.gadarts.neverendingstory.model.User;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 

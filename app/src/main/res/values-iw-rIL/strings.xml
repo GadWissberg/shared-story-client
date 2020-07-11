@@ -24,4 +24,5 @@
     <string name="hint_suggest_story_paragraph">הצע את פסקת ההמשך…</string>
     <string name="header_suggested_paragraphs">הצעות להמשך הסיפור:</string>
     <string name="label_no_suggestions">היה הראשון להציע המשך!</string>
+    <string name="button_submit_vote">שלח הצבעה</string>
 </resources>

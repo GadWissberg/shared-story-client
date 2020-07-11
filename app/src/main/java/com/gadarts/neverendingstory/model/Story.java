@@ -1,4 +1,4 @@
-package com.gadarts.neverendingstory.models;
+package com.gadarts.neverendingstory.model;
 
 import java.util.ArrayList;
 import java.util.List;
