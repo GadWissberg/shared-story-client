@@ -22,6 +22,7 @@ import com.gadarts.neverendingstory.services.DataInflater;
 import com.gadarts.neverendingstory.services.http.AppRequest;
 import com.gadarts.neverendingstory.services.http.HttpCallTask;
 import com.gadarts.neverendingstory.services.http.HttpCallTask.RequestType;
+import com.gadarts.neverendingstory.services.http.OnRequestResult;
 import com.gadarts.neverendingstory.services.http.OnResults;
 import com.gadarts.neverendingstory.services.http.ServerResponse;
 import com.google.gson.JsonObject;
@@ -53,7 +54,17 @@ public class StoryViewActivity extends Activity {
         title.setText("LOADING");
         OurTaleApplication application = (OurTaleApplication) getApplication();
         long storyId = getIntent().getLongExtra(SELECTED_STORY, 0);
-        AppRequest appRequest = new AppRequest(GET_STORY, RequestType.GET, (response, context) -> initializeStoryView(storyId, response));
+        OnResults onResults = new OnResults(
+                (response, context) -> initializeStoryView(storyId, response),
+                (response, context) -> {
+                    if (response.getCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                        Intent intent = new Intent(this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                    Toast.makeText(context, "" + response.getCode(), Toast.LENGTH_LONG).show();
+                });
+        AppRequest appRequest = new AppRequest(GET_STORY, RequestType.GET, onResults);
         appRequest.addParameter(KEY_REQUEST_ID, storyId);
         HttpCallTask task = new HttpCallTask(application.getClient(), appRequest, this);
         task.execute();
@@ -65,19 +76,7 @@ public class StoryViewActivity extends Activity {
         });
         Button submitSuggestionButton = findViewById(R.id.button_submit_suggestion);
         submitSuggestionButton.setOnClickListener(view -> {
-            OnResults onResult = new OnResults(
-                    (response, context) -> Toast.makeText(
-                            context,
-                            "Paragraph has been suggested ",
-                            Toast.LENGTH_LONG).show(),
-                    (response, context) -> {
-                        if (response.getCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                            Intent intent = new Intent(this, LoginActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                        Toast.makeText(context, "" + response.getCode(), Toast.LENGTH_LONG).show();
-                    });
+            OnRequestResult onResult = (response, context) -> Toast.makeText(getApplicationContext(), "Paragraph has been suggested ", Toast.LENGTH_LONG).show();
             AppRequest request = new AppRequest(POST_PARAGRAPH_SUGGESTION, RequestType.POST, onResult);
             request.addParameter(KEY_REQUEST_STORY_ID, storyId);
             request.addParameter(KEY_REQUEST_PARAGRAPH, paragraphSuggestionEditText.getText());

@@ -15,7 +15,7 @@ public class OnResults {
     private final OnRequestResult onSuccess;
     private final OnRequestResult onFailure;
 
-    public OnResults(OnRequestResult onSuccess, OnRequestResult onFailure) {
+    public OnResults(final OnRequestResult onSuccess, final OnRequestResult onFailure) {
         this.onSuccess = onSuccess;
         if (Optional.ofNullable(onFailure).isPresent()) {
             this.onFailure = onFailure;
