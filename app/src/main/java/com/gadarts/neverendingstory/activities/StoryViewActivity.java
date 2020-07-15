@@ -99,17 +99,20 @@ public class StoryViewActivity extends Activity {
         if (!suggestions.isEmpty()) {
             Button submitVoteButton = findViewById(R.id.button_submit_vote);
             submitVoteButton.setVisibility(View.VISIBLE);
-            AppRequest voteRequest = new AppRequest(VOTE_URL, RequestType.POST, (res, context) -> Toast.makeText(getApplicationContext(), "SENT", Toast.LENGTH_LONG));
+            AppRequest voteRequest = new AppRequest(VOTE_URL, RequestType.PUT, (res, context) -> Toast.makeText(getApplicationContext(), res.getMessage(), Toast.LENGTH_LONG));
             HashMap<String, Object> parameters = new HashMap<>();
-            parameters.put(KEY_REQUEST_ID, 0);
             voteRequest.setParameters(parameters);
-            submitVoteButton.setOnClickListener(view -> new HttpCallTask(application.getClient(), voteRequest, getApplicationContext()));
             RadioGroup radioGroup = new RadioGroup(this);
+            submitVoteButton.setOnClickListener(view -> {
+                parameters.put(KEY_REQUEST_ID, radioGroup.getCheckedRadioButtonId());
+                new HttpCallTask(application.getClient(), voteRequest, getApplicationContext()).execute();
+            });
             findViewById(R.id.label_no_suggestions).setVisibility(View.GONE);
             LinearLayout linearLayout = findViewById(R.id.story_view_suggested_paragraphs);
             linearLayout.addView(radioGroup);
             suggestions.forEach(paragraph -> {
                 RadioButton radioButton = new RadioButton(getApplicationContext());
+                radioButton.setId((int) paragraph.getId());
                 radioButton.setText(paragraph.getContent());
                 radioButton.setBackground(getDrawable(R.drawable.suggestion_view));
                 radioGroup.addView(radioButton);
@@ -120,10 +123,10 @@ public class StoryViewActivity extends Activity {
         }
     }
 
-    private LinearLayout addParagraphToParagraphsLayout(final String content,
-                                                        final User user,
-                                                        final int paragraphView,
-                                                        final int layoutId) {
+    private void addParagraphToParagraphsLayout(final String content,
+                                                final User user,
+                                                final int paragraphView,
+                                                final int layoutId) {
         LinearLayout linearLayout = findViewById(layoutId);
         LinearLayout paragraphLayout = new LinearLayout(getApplicationContext());
         paragraphLayout.setOrientation(LinearLayout.VERTICAL);
@@ -136,6 +139,5 @@ public class StoryViewActivity extends Activity {
         paragraphLayout.addView(paragraph);
         paragraphLayout.addView(author);
         linearLayout.addView(paragraphLayout);
-        return paragraphLayout;
     }
 }

@@ -17,7 +17,9 @@ public class AppRequest {
     @Setter
     private HashMap<String, Object> parameters = new HashMap<>();
 
-    public AppRequest(String url, HttpCallTask.RequestType type, OnRequestResult onSuccess) {
+    public AppRequest(final String url,
+                      final HttpCallTask.RequestType type,
+                      final OnRequestResult onSuccess) {
         this(url, type, new OnResults(onSuccess, null));
     }
 
@@ -26,7 +28,9 @@ public class AppRequest {
      * @param type      HTTP request type.
      * @param onResults Callbacks to be processed once response is received.
      */
-    public AppRequest(String url, HttpCallTask.RequestType type, OnResults onResults) {
+    public AppRequest(final String url,
+                      final HttpCallTask.RequestType type,
+                      final OnResults onResults) {
         this.url = url;
         this.type = type;
         this.onResults = onResults;
@@ -38,7 +42,7 @@ public class AppRequest {
      * @param key
      * @param value
      */
-    public void addParameter(String key, Object value) {
+    public void addParameter(final String key, final Object value) {
         parameters.put(key, value);
     }
 }
