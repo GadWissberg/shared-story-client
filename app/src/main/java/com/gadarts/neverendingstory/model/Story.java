@@ -11,11 +11,11 @@ public class Story {
     private final long id;
     private final User owner;
 
-    private List<Paragraph> paragraphs = new ArrayList<>();
+    private final List<Paragraph> paragraphs = new ArrayList<>();
 
-    private List<Paragraph> suggestions = new ArrayList<>();
+    private final List<Paragraph> suggestions = new ArrayList<>();
 
-    public Story(long id, String title, User owner) {
+    public Story(final long id, final String title, final User owner) {
         this.id = id;
         this.title = title;
         this.owner = owner;

@@ -23,6 +23,8 @@ public class DataInflater {
     private static final String KEY_STORY_ID = "story_id";
     private static final String KEY_OWNER_ID = "owner_id";
     private static final String KEY_CONTENT = "content";
+    private static final String KEY_VOTEABLE = "voteable";
+    private static final String KEY_VOTES = "votes";
     private static final String KEY_FIRST_PARAGRAPH = "first_paragraph";
     private static final String KEY_PARTICIPANTS = "participants";
 
@@ -74,12 +76,19 @@ public class DataInflater {
     @NotNull
     private Paragraph createParagraph(final JsonObject asJsonObject) {
         long pId = asJsonObject.get(KEY_ID).getAsLong();
-        Paragraph paragraph;
         long storyId = asJsonObject.get(KEY_STORY_ID).getAsLong();
         long ownerId = asJsonObject.get(KEY_OWNER_ID).getAsLong();
         String content = asJsonObject.get(KEY_CONTENT).getAsString();
-        paragraph = new Paragraph(pId, storyId, ownerId, content);
+        Paragraph paragraph = new Paragraph(pId, storyId, ownerId, content);
+        inflateVotesData(asJsonObject, paragraph);
         return paragraph;
+    }
+
+    private void inflateVotesData(final JsonObject asJsonObject, final Paragraph paragraph) {
+        if (asJsonObject.has(KEY_VOTEABLE) && !asJsonObject.get(KEY_VOTEABLE).isJsonNull()) {
+            paragraph.setVoteable(asJsonObject.get(KEY_VOTEABLE).getAsBoolean());
+            paragraph.setVotes(asJsonObject.get(KEY_VOTES).getAsInt());
+        }
     }
 
     public User inflateUser(final JsonObject ownerJsonObject) {
@@ -94,7 +103,7 @@ public class DataInflater {
         return user;
     }
 
-    public User getUserFromCache(long id) {
+    public User getUserFromCache(final long id) {
         return cachedUsers.get(id);
     }
 }

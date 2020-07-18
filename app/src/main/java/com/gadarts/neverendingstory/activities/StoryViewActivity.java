@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -44,7 +45,11 @@ public class StoryViewActivity extends Activity {
     private static final String KEY_REQUEST_PARAGRAPH = "paragraph";
     private static final String LABEL_STARTED_BY = "Started by %s";
     private static final String LABEL_BY = "By %s";
+    private static final String LABEL_VOTES = "Votes: %s";
     private static final String VOTE_URL = HOST + "vote";
+    private static final int PADDING_SUGGESTION = 10;
+    private static final int PADDING_BOTTOM_SUGGESTION = 80;
+    private static final int MARGIN_SUGGESTION = 10;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -115,10 +120,19 @@ public class StoryViewActivity extends Activity {
                 radioButton.setId((int) paragraph.getId());
                 radioButton.setText(paragraph.getContent());
                 radioButton.setBackground(getDrawable(R.drawable.suggestion_view));
+                radioButton.setPadding(PADDING_SUGGESTION, PADDING_SUGGESTION, PADDING_SUGGESTION, PADDING_SUGGESTION);
                 radioGroup.addView(radioButton);
                 TextView author = new TextView(getApplicationContext());
-                author.setText(String.format(LABEL_BY, dataInflater.getUserFromCache(paragraph.getOwnerId()).getName()));
+                author.setPadding(PADDING_SUGGESTION, PADDING_SUGGESTION, PADDING_SUGGESTION, PADDING_SUGGESTION);
                 radioGroup.addView(author);
+                author.setText(String.format(LABEL_BY, dataInflater.getUserFromCache(paragraph.getOwnerId()).getName()));
+                TextView votes = new TextView(getApplicationContext());
+                votes.setText(String.format(LABEL_VOTES, paragraph.getVotes()));
+                votes.setPadding(PADDING_SUGGESTION, PADDING_SUGGESTION, PADDING_SUGGESTION, PADDING_BOTTOM_SUGGESTION);
+                radioGroup.addView(votes);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(MARGIN_SUGGESTION, MARGIN_SUGGESTION, MARGIN_SUGGESTION, MARGIN_SUGGESTION);
+                radioGroup.setLayoutParams(params);
             });
         }
     }
