@@ -27,6 +27,7 @@ public class DataInflater {
     private static final String KEY_VOTES = "votes";
     private static final String KEY_FIRST_PARAGRAPH = "first_paragraph";
     private static final String KEY_PARTICIPANTS = "participants";
+    private static final String KEY_DEADLINE = "deadline";
 
     private final Map<Long, User> cachedUsers = new HashMap<>();
 
@@ -40,10 +41,18 @@ public class DataInflater {
         Story story = new Story(storyId, jsonObject.get(KEY_TITLE).getAsString(), user);
         if (jsonObject.has(KEY_PARAGRAPHS)) {
             inflateAllParagraphs(jsonObject, story);
+            inflateDeadline(jsonObject, story);
         } else if (jsonObject.has(KEY_FIRST_PARAGRAPH)) {
             inflateFirstParagraph(jsonObject, story);
         }
         return story;
+    }
+
+    private void inflateDeadline(@NotNull final JsonObject jsonObject, final Story story) {
+        if (jsonObject.has(KEY_DEADLINE)) {
+            long deadline = jsonObject.get(KEY_DEADLINE).getAsLong();
+            story.setDeadline(deadline);
+        }
     }
 
     private void inflateFirstParagraph(@NotNull final JsonObject jsonObject, final Story story) {

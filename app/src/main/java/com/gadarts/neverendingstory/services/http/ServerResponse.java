@@ -2,6 +2,7 @@ package com.gadarts.neverendingstory.services.http;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 
 import lombok.Getter;
 
@@ -14,19 +15,31 @@ public class ServerResponse {
             + " Mandatory parameter missing: %s";
     private static final String PAR_MESSAGE = "message";
     private static final String PAR_DATA = "data";
+    private static final int INVALID_RESPONSE = -1;
 
-    private final boolean success;
-    private final String message;
-    private final JsonObject data;
+    private boolean success;
+    private String message;
+    private JsonObject data;
     private int code;
 
-    ServerResponse(boolean success, String message) {
+    ServerResponse(final boolean success, final String message) {
         this.success = success;
         this.message = message;
         this.data = null;
     }
 
-    ServerResponse(String responseString, int httpCode) throws ResponseInflationFailureException {
+    ServerResponse(final String responseString,
+                   final int httpCode) throws ResponseInflationFailureException {
+        try {
+            initializeResponse(responseString, httpCode);
+        } catch (final JsonSyntaxException e) {
+            e.printStackTrace();
+            code = INVALID_RESPONSE;
+        }
+    }
+
+    private void initializeResponse(final String responseString,
+                                    final int httpCode) throws ResponseInflationFailureException {
         JsonObject map = gson.fromJson(responseString, JsonObject.class);
         this.code = httpCode;
         this.message = map.has(PAR_MESSAGE) ? map.get(PAR_MESSAGE).getAsString() : null;
@@ -39,7 +52,7 @@ public class ServerResponse {
     }
 
     static class ResponseInflationFailureException extends Throwable {
-        ResponseInflationFailureException(String message) {
+        ResponseInflationFailureException(final String message) {
             super(message);
         }
     }

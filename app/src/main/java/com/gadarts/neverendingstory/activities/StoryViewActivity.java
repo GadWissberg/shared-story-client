@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -31,6 +32,7 @@ import com.google.gson.JsonObject;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.Nullable;
 
@@ -38,6 +40,7 @@ import static com.gadarts.neverendingstory.OurTaleApplication.HOST;
 import static com.gadarts.neverendingstory.StoriesListAdapter.SELECTED_STORY;
 
 public class StoryViewActivity extends Activity {
+    public static final int TIMER_COUNT_DOWN_INTERVAL = 1000;
     private static final String GET_STORY = HOST + "story";
     private static final String POST_PARAGRAPH_SUGGESTION = HOST + "paragraph_suggestion";
     private static final String KEY_REQUEST_ID = "id";
@@ -50,6 +53,10 @@ public class StoryViewActivity extends Activity {
     private static final int PADDING_SUGGESTION = 10;
     private static final int PADDING_BOTTOM_SUGGESTION = 80;
     private static final int MARGIN_SUGGESTION = 10;
+    private static final String TIMES_UP = "00:00 - Time's up!";
+    private static final String LABEL_TIME_LEFT = "Time left: ";
+    private static final String SUB_LABEL_AND = "and";
+    private static final String LABEL_DAYS = "day";
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -102,6 +109,52 @@ public class StoryViewActivity extends Activity {
         story.getParagraphs().forEach(paragraph -> addParagraphToParagraphsLayout(paragraph.getContent(), dataInflater.getUserFromCache(paragraph.getOwnerId()), R.drawable.regular_paragraph_view, R.id.story_view_paragraphs));
         List<Paragraph> suggestions = story.getSuggestions();
         if (!suggestions.isEmpty()) {
+
+            long deadline = story.getDeadline();
+            TextView timer = findViewById(R.id.timer);
+            timer.setVisibility(View.VISIBLE);
+            long timeLeft = deadline * 1000 - (System.currentTimeMillis());
+            StringBuilder stringBuilder = new StringBuilder();
+            if (timeLeft > 0) {
+                new CountDownTimer(timeLeft, TIMER_COUNT_DOWN_INTERVAL) {
+
+                    public void onTick(final long millisUntilFinished) {
+                        long days = TimeUnit.MILLISECONDS.toDays(millisUntilFinished);
+                        long hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(millisUntilFinished));
+                        long minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished));
+                        long seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished));
+                        stringBuilder.setLength(0);
+                        stringBuilder.append(LABEL_TIME_LEFT);
+                        if (days > 0) {
+                            stringBuilder.append(days).append(" ").append(LABEL_DAYS);
+                            if (days > 1) {
+                                stringBuilder.append('s');
+                            }
+                            stringBuilder.append(" ").append(SUB_LABEL_AND).append(" ");
+                        }
+                        if (hours <= 9) {
+                            stringBuilder.append('0');
+                        }
+                        stringBuilder.append(hours).append(':');
+                        if (minutes <= 9) {
+                            stringBuilder.append('0');
+                        }
+                        stringBuilder.append(minutes).append(':');
+                        if (seconds <= 9) {
+                            stringBuilder.append('0');
+                        }
+                        stringBuilder.append(seconds);
+                        timer.setText(stringBuilder);
+                    }
+
+                    public void onFinish() {
+                    }
+
+                }.start();
+            } else {
+                timer.setText(TIMES_UP);
+            }
+
             Button submitVoteButton = findViewById(R.id.button_submit_vote);
             submitVoteButton.setVisibility(View.VISIBLE);
             AppRequest voteRequest = new AppRequest(VOTE_URL, RequestType.PUT, (res, context) -> Toast.makeText(getApplicationContext(), res.getMessage(), Toast.LENGTH_LONG));
