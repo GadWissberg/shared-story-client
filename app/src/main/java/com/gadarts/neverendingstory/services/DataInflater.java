@@ -72,6 +72,7 @@ public class DataInflater {
     private void inflateParagraphs(final JsonObject storyJson,
                                    final String keyParagraphs,
                                    final List<Paragraph> output) {
+        if (!storyJson.has(keyParagraphs)) return;
         output.clear();
         JsonArray asJsonArray = storyJson.get(keyParagraphs).getAsJsonArray();
         asJsonArray.forEach(pJson -> output.add(inflateParagraph(pJson.getAsJsonObject())));
@@ -95,8 +96,11 @@ public class DataInflater {
 
     private void inflateVotesData(final JsonObject asJsonObject, final Paragraph paragraph) {
         if (asJsonObject.has(KEY_VOTEABLE) && !asJsonObject.get(KEY_VOTEABLE).isJsonNull()) {
-            paragraph.setVoteable(asJsonObject.get(KEY_VOTEABLE).getAsBoolean());
-            paragraph.setVotes(asJsonObject.get(KEY_VOTES).getAsInt());
+            boolean voteable = asJsonObject.get(KEY_VOTEABLE).getAsBoolean();
+            paragraph.setVoteable(voteable);
+            if (voteable) {
+                paragraph.setVotes(asJsonObject.get(KEY_VOTES).getAsInt());
+            }
         }
     }
 
